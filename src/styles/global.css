@@ -365,45 +365,6 @@ button:focus-visible {
   transform: translateY(0);
 }
 
-.hero-work {
-  left: 72%;
-  top: 38%;
-  width: 24.5%;
-  height: 7.5%;
-  border-radius: 6px;
-  transform: skewX(-16deg);
-  overflow: hidden;
-}
-
-.hero-work::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.45),
-    transparent
-  );
-  transition: left 0.55s ease;
-  pointer-events: none;
-}
-
-.hero-work:hover::before {
-  left: 140%;
-}
-
-.hero-work .hero-hotspot-badge {
-  transform: skewX(16deg) translateY(6px);
-}
-
-.hero-work:hover .hero-hotspot-badge {
-  transform: skewX(16deg) translateY(0);
-}
-
 /* Hero Bottom Bar: Android, Desktop, Web Domain Cards */
 .hero-domains-header {
   position: absolute;
@@ -603,7 +564,6 @@ button:focus-visible {
 .sparkle-1 { top: 10%; left: 8%; }
 .sparkle-2 { top: 13%; right: 9%; }
 .sparkle-3 { top: 39%; left: 22%; font-size: 20px; }
-.sparkle-4 { top: 61%; left: 3.8%; font-size: 18px; }
 
 /* Y2K Ticker / Marquee Band */
 .ticker-wrap {
