@@ -81,12 +81,12 @@ const { project, nextProject } = Astro.props;
       }
     </div>
 
-    <!-- Confidential Enterprise Note (if present) -->
+    <!-- Confidential Enterprise / Status Note (if present) -->
     {
       project.confidentialNote && (
         <div class="hud-frame confidential-banner" data-gsap="reveal">
           <span class="overline" style="color: #77ffb6;">
-            ● INTERNAL ENTERPRISE SYSTEM // SCREENSHOT & FEATURE BRIEF
+            {project.confidentialTitle ?? '● INTERNAL ENTERPRISE SYSTEM // SCREENSHOT & FEATURE BRIEF'}
           </span>
           <p>{project.confidentialNote}</p>
         </div>

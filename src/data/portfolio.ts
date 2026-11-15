@@ -26,6 +26,7 @@ export interface Project {
   cropPosition?: string;
   techStack?: string[];
   liveUrl?: string;
+  confidentialTitle?: string;
   confidentialNote?: string;
   screenshots?: { src: string; caption: string; tag: string }[];
   screenshotGroups?: ScreenshotGroup[];
@@ -245,30 +246,30 @@ export const projects: Project[] = [
     slug: 'owe-debt-collect',
     number: '02',
     category: 'ANDROID & WEB',
-    tag: 'KOTLIN COMPOSE + NEXT.JS 15 + SUPABASE + TAILWIND v4',
+    tag: 'KOTLIN COMPOSE + NEXT.JS 15 + SUPABASE (IN PROGRESS // AI CHAT SOON)',
     title: 'OWE. / DEBT COLLECT',
-    subtitle: 'Peer-to-Peer Loan & Repayment Ecosystem with Kotlin Compose Android App & Next.js 15 Admin Console',
-    year: '2026',
+    subtitle: 'Peer-to-Peer Loan & Repayment Ecosystem with Kotlin Compose Android App & Next.js 15 Admin Console (In Progress)',
+    year: '2026 · WIP',
     client: 'DUA / OWE Financial Utility Ecosystem',
     role: 'Lead Android (Kotlin / Jetpack Compose) & Full-Stack Next.js Developer',
     summary:
-      'A cross-platform peer-to-peer loan and debt management ecosystem pairing a native Android mobile application (built in Kotlin 2.1, Jetpack Compose Material 3, Ktor, and Supabase Kotlin SDK v3) with a Next.js 15, React 19, TypeScript, and Tailwind CSS v4 Web Administration Console—synchronized in real time via Supabase PostgreSQL, Realtime channels, and dynamic JSONB remote config.',
+      'An actively developed cross-platform peer-to-peer loan and debt management ecosystem pairing a native Android mobile application (Kotlin 2.1, Jetpack Compose Material 3, Ktor, and Supabase Kotlin SDK v3) with a Next.js 15, React 19, TypeScript, and Tailwind CSS v4 Web Administration Console. Currently in active development, with an integrated AI Chat System coming soon to assist lenders and borrowers with smart repayment insights, automated reminders, and conversational debt queries.',
     challenge:
       'Informal lending and borrowing between individuals often suffers from disputed balances, lost GCash/bank reference numbers, and forgotten installment dates. Both lenders and borrowers needed a shared, transparent ledger where loan terms, installment schedules, and payment confirmations are mutually verified—backed by an administrative operations console for auditing, support triage, and remote app configuration.',
     solution:
-      'Engineered a dual-application ecosystem on Supabase. Built OWE_Mobile natively for Android using Kotlin 2.1 and Jetpack Compose (Material 3), featuring a unified Lender ("Money I Lent") and Borrower ("Money I Owe") workflow, automated Flat-Rate (₱) and Percentage (%) installment calculators, 7-day expiring Borrower Invite Codes (DC-XXXXXX), GCash/Maya/Bank payment submission with lender verification, cascading PSGC Philippine address selection, offline LocalDiskCache, and Google AdMob + OWE Pro subscription tiers. Paired it with OWE_Admin in Next.js 15 (App Router, Turbopack, Server Actions) and React 19 for portfolio collection analytics, immutable audit logs, support ticket triage, real-time broadcast announcements, and remote feature flags.',
+      'Engineered a dual-application ecosystem on Supabase. Built OWE_Mobile natively for Android using Kotlin 2.1 and Jetpack Compose (Material 3), featuring a unified Lender ("Money I Lent") and Borrower ("Money I Owe") workflow, automated Flat-Rate (₱) and Percentage (%) installment calculators, 7-day expiring Borrower Invite Codes (DC-XXXXXX), GCash/Maya/Bank payment submission with lender verification, cascading PSGC Philippine address selection, offline LocalDiskCache, and Google AdMob + OWE Pro subscription tiers. Paired it with OWE_Admin in Next.js 15 (App Router, Turbopack, Server Actions) and React 19 for portfolio collection analytics, immutable audit logs, support ticket triage, real-time broadcast announcements, and remote feature flags—with an in-app AI Chat System currently in progress.',
     deliverables: [
       'Native Android App (Kotlin 2.1, Jetpack Compose Material 3, Navigation Compose, MVVM)',
       'Next.js 15 & React 19 Admin Console (App Router, Server Actions, TypeScript, Tailwind CSS v4)',
       'Supabase PostgreSQL Views (debt_summary), RLS Policies, Auth & Realtime Channels',
       'Dual Lender & Borrower Engine with 7-Day Expiring Invite Codes (DC-XXXXXX)',
       'Installment Calculator (Flat Rate ₱ / Percentage %, 3m–24m) & Payment Verification Flow',
-      'Remote App Config (app_config JSONB Flags), AdMob Integration & OWE Pro Subscriptions',
+      'Upcoming Roadmap: Integrated AI Chat System for Smart Loan & Repayment Assistance (In Progress)',
     ],
     metrics: [
       { label: 'MOBILE STACK', value: 'KOTLIN COMPOSE' },
       { label: 'ADMIN STACK', value: 'NEXT.JS 15 + TS' },
-      { label: 'BACKEND', value: 'SUPABASE REALTIME' },
+      { label: 'STATUS / NEXT', value: 'WIP · AI CHAT' },
     ],
     techStack: [
       'Kotlin 2.1',
@@ -279,7 +280,11 @@ export const projects: Project[] = [
       'Supabase (PostgreSQL, Auth, Realtime, SSR)',
       'Ktor Client & Kotlinx Serialization',
       'Google AdMob SDK',
+      'AI Chat System (Coming Soon)',
     ],
+    confidentialTitle: '● ACTIVE DEVELOPMENT // UPCOMING AI CHAT SYSTEM ROADMAP',
+    confidentialNote:
+      'Status Note: OWE. (Debt Collect) is actively in progress. The next major milestone on the roadmap is an integrated AI Chat System built directly into the ecosystem—enabling users to ask natural-language questions about their loan balances, get smart repayment schedules and financial insights, and receive automated conversational assistance.',
     screenshotGroups: [
       {
         overline: 'ROLE MODULE 01 // KOTLIN & JETPACK COMPOSE ANDROID APP (18 SCREENS)',
@@ -448,7 +453,6 @@ export const projects: Project[] = [
     year: '2026',
     client: 'Academic Science Laboratory (Confidential Institution)',
     role: 'Full-Stack Web & Flutter Desktop Developer',
-    liveUrl: 'https://scilab3-0-web.vercel.app/login',
     summary:
       'A unified Science Laboratory Inventory and Reservation platform consisting of a Professor & Student Web Portal (deployed on Vercel) and a cross-platform Flutter Windows Desktop Admin Application—powered by Supabase PostgreSQL, PL/pgSQL atomic RPC functions, and Supabase Realtime.',
     challenge:

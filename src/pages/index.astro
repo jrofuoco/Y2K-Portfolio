@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { aboutInfo, contactInfo, projects, services, servicesInfo } from '../data/portfolio';
 
-const featuredProjects = projects;
+const featuredProjects = projects.slice(0, 3);
 ---
 
 <BaseLayout
@@ -128,7 +128,7 @@ const featuredProjects = projects;
       </div>
     </div>
 
-    <div class="projects-grid projects-grid--two">
+    <div class="projects-grid">
       {featuredProjects.map((project) => <ProjectCard project={project} />)}
     </div>
   </section>
