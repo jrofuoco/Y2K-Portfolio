@@ -393,8 +393,8 @@ button:focus-visible {
 
 .hero-domain-card {
   position: absolute;
-  top: 65.5%;
-  width: 29.8%;
+  top: 65.75%;
+  width: 29.45%;
   z-index: 4;
   display: flex;
   flex-direction: column;
@@ -402,21 +402,21 @@ button:focus-visible {
 }
 
 .hero-project-one {
-  left: 3.15%;
+  left: 3.71%;
 }
 
 .hero-project-two {
-  left: 34.85%;
+  left: 35.31%;
 }
 
 .hero-project-three {
-  left: 66.55%;
+  left: 67.05%;
 }
 
 .hero-domain-box {
   position: relative;
   width: 100%;
-  aspect-ratio: 442 / 180;
+  aspect-ratio: 437 / 177;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -714,6 +714,15 @@ button:focus-visible {
   background-image:
     linear-gradient(180deg, rgba(4, 20, 66, 0.45) 0%, rgba(7, 66, 184, 0.28) 50%, rgba(2, 11, 43, 0.72) 100%),
     url('/assets/projects/audit-portal/dashboard.jpg');
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+}
+
+.art-owe {
+  background-image:
+    linear-gradient(180deg, rgba(4, 20, 66, 0.38) 0%, rgba(7, 66, 184, 0.22) 50%, rgba(2, 11, 43, 0.72) 100%),
+    url('/assets/projects/owe/admin-dashboard.png');
   background-size: cover;
   background-position: top center;
   background-repeat: no-repeat;

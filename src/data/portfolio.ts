@@ -242,8 +242,205 @@ export const projects: Project[] = [
     artClass: 'art-audit-portal',
   },
   {
-    slug: 'scilab-reserve',
+    slug: 'owe-debt-collect',
     number: '02',
+    category: 'ANDROID & WEB',
+    tag: 'KOTLIN COMPOSE + NEXT.JS 15 + SUPABASE + TAILWIND v4',
+    title: 'OWE. / DEBT COLLECT',
+    subtitle: 'Peer-to-Peer Loan & Repayment Ecosystem with Kotlin Compose Android App & Next.js 15 Admin Console',
+    year: '2026',
+    client: 'DUA / OWE Financial Utility Ecosystem',
+    role: 'Lead Android (Kotlin / Jetpack Compose) & Full-Stack Next.js Developer',
+    summary:
+      'A cross-platform peer-to-peer loan and debt management ecosystem pairing a native Android mobile application (built in Kotlin 2.1, Jetpack Compose Material 3, Ktor, and Supabase Kotlin SDK v3) with a Next.js 15, React 19, TypeScript, and Tailwind CSS v4 Web Administration Console—synchronized in real time via Supabase PostgreSQL, Realtime channels, and dynamic JSONB remote config.',
+    challenge:
+      'Informal lending and borrowing between individuals often suffers from disputed balances, lost GCash/bank reference numbers, and forgotten installment dates. Both lenders and borrowers needed a shared, transparent ledger where loan terms, installment schedules, and payment confirmations are mutually verified—backed by an administrative operations console for auditing, support triage, and remote app configuration.',
+    solution:
+      'Engineered a dual-application ecosystem on Supabase. Built OWE_Mobile natively for Android using Kotlin 2.1 and Jetpack Compose (Material 3), featuring a unified Lender ("Money I Lent") and Borrower ("Money I Owe") workflow, automated Flat-Rate (₱) and Percentage (%) installment calculators, 7-day expiring Borrower Invite Codes (DC-XXXXXX), GCash/Maya/Bank payment submission with lender verification, cascading PSGC Philippine address selection, offline LocalDiskCache, and Google AdMob + OWE Pro subscription tiers. Paired it with OWE_Admin in Next.js 15 (App Router, Turbopack, Server Actions) and React 19 for portfolio collection analytics, immutable audit logs, support ticket triage, real-time broadcast announcements, and remote feature flags.',
+    deliverables: [
+      'Native Android App (Kotlin 2.1, Jetpack Compose Material 3, Navigation Compose, MVVM)',
+      'Next.js 15 & React 19 Admin Console (App Router, Server Actions, TypeScript, Tailwind CSS v4)',
+      'Supabase PostgreSQL Views (debt_summary), RLS Policies, Auth & Realtime Channels',
+      'Dual Lender & Borrower Engine with 7-Day Expiring Invite Codes (DC-XXXXXX)',
+      'Installment Calculator (Flat Rate ₱ / Percentage %, 3m–24m) & Payment Verification Flow',
+      'Remote App Config (app_config JSONB Flags), AdMob Integration & OWE Pro Subscriptions',
+    ],
+    metrics: [
+      { label: 'MOBILE STACK', value: 'KOTLIN COMPOSE' },
+      { label: 'ADMIN STACK', value: 'NEXT.JS 15 + TS' },
+      { label: 'BACKEND', value: 'SUPABASE REALTIME' },
+    ],
+    techStack: [
+      'Kotlin 2.1',
+      'Jetpack Compose (Material 3)',
+      'Next.js 15 (App Router & Turbopack)',
+      'React 19 & TypeScript 5',
+      'Tailwind CSS v4',
+      'Supabase (PostgreSQL, Auth, Realtime, SSR)',
+      'Ktor Client & Kotlinx Serialization',
+      'Google AdMob SDK',
+    ],
+    screenshotGroups: [
+      {
+        overline: 'ROLE MODULE 01 // KOTLIN & JETPACK COMPOSE ANDROID APP (18 SCREENS)',
+        title: 'Lender & Borrower',
+        titleAccent: 'Android app.',
+        portrait: true,
+        description:
+          'Native Android application built with Kotlin 2.1, Jetpack Compose (Material 3), Ktor, and Supabase Kotlin SDK—unifying Lender and Borrower workflows with invite-code loan linking, installment calculation, GCash/Maya payment verification, PSGC address lookup, and OWE Pro upgrades.',
+        items: [
+          {
+            src: '/assets/projects/owe/mobile-onboarding.png',
+            tag: 'APP 01 // ONBOARDING WALKTHROUGH',
+            caption: 'Interactive onboarding slide ("01 · BORROW & LEND — Borrow & Lend with Clarity") introducing instant loan creation and invite-code linking.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-login.png',
+            tag: 'APP 02 // AUTHENTICATION GATEWAY',
+            caption: 'OWE. sign-in screen featuring the signature owl emblem ("BORROW · TRACK · SETTLE"), email/password login, Remember Me, and password recovery.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-register.png',
+            tag: 'APP 03 // ACCOUNT REGISTRATION & PSGC ADDRESS',
+            caption: 'Structured account creation capturing Personal Information and cascading Philippine Standard Geographic Code (PSGC) Address Details (Province, Municipality/City, Barangay).',
+          },
+          {
+            src: '/assets/projects/owe/mobile-reset-password.png',
+            tag: 'APP 04 // OTP PASSWORD RECOVERY',
+            caption: 'Password reset flow dispatching a 6-digit email verification code via Supabase Auth.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-home-lender.png',
+            tag: 'APP 05 // LENDER HOME & PORTFOLIO DASHBOARD',
+            caption: 'Home dashboard with Money I Lent / Money I Owe mode switcher, Total Outstanding card (₱125,000.00), Total Lent (₱174,620.00), Collected (₱49,620.00), status filters, and active debt progress.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-new-debt.png',
+            tag: 'APP 06 // CREATE DEBT & INSTALLMENT CALCULATOR',
+            caption: 'New Debt builder supporting Flat Rate (₱) and Percentage (%) interest, duration chips (3m, 6m, 12m, 24m), monthly Pay Day (1–31), and live Monthly Payment & Total to Collect calculation.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-share-invite-code.png',
+            tag: 'APP 07 // BORROWER INVITE CODE GENERATOR',
+            caption: 'Post-creation screen generating a 7-day expiring Borrower Invite Code (DC-73772B) with direct sharing via Messenger, WhatsApp, SMS, Copy Link, or code regeneration.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-notifications.png',
+            tag: 'APP 08 // REAL-TIME NOTIFICATIONS FEED',
+            caption: 'Real-time alert center notifying the lender when a borrower accepts and joins a loan record using their invite code.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-all-debts-lender.png',
+            tag: 'APP 09 // LENDER MASTER DEBTS LEDGER',
+            caption: 'All Debts tab with All Debts / Money Lent / Money Owed filters, pending invite alert banner, Active/Overdue/Fully Paid counters, and status-badged loan cards.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-debt-details-lender.png',
+            tag: 'APP 10 // LENDER DEBT DETAILS & SCHEDULE',
+            caption: 'Lender loan breakdown displaying Borrower info, ₱125,000.00 remaining balance (16% paid), 2 of 12 paid installments (₱12,500.00/mo), next due date, and confirmed GCash payments.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-debt-payment-records.png',
+            tag: 'APP 11 // CONFIRMED INSTALLMENT RECORDS',
+            caption: 'Verified payment history view tracking each installment amount, GCash payment method, reference number, and confirmation status.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-recent-activity.png',
+            tag: 'APP 12 // MONTHLY COLLECTION & ACTIVITY TIMELINE',
+            caption: 'Recent Activity stream with category filters (All Activity, Payments, Debts Created, Pending), Collected This Month banner (₱49,620.00 · 9 events), and chronological ledger updates.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-borrower-debts.png',
+            tag: 'APP 13 // BORROWER DEBTS OVERVIEW',
+            caption: 'Borrower-side All Debts view displaying active and fully paid loans owed to lender Dua Orlina with real-time progress bars.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-borrower-debt-details.png',
+            tag: 'APP 14 // BORROWER REPAYMENT BREAKDOWN',
+            caption: 'Borrower loan detail view showing the Lender profile (Dua Orlina), remaining balance, monthly installment schedule, payment history, and Submit Payment CTA.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-submit-payment.png',
+            tag: 'APP 15 // SUBMIT INSTALLMENT PAYMENT',
+            caption: 'Borrower payment submission form with auto-filled installment amount, Pay full balance shortcut, Payment Method pills (Cash, GCash, Maya, Bank Transfer, Other), Reference Number input, and installment tracker (Installment 3 of 12).',
+          },
+          {
+            src: '/assets/projects/owe/mobile-profile-settings.png',
+            tag: 'APP 16 // VERIFIED PROFILE & OWE PRO UPGRADE',
+            caption: 'User profile and settings screen featuring Verified Account badge, Upgrade to OWE Pro banner (₱99/mo for unlimited debts, PDF export & no ads), security controls, and build version.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-change-password-modal.png',
+            tag: 'APP 17 // SECURITY & PASSWORD UPDATE MODAL',
+            caption: 'In-app Change Password bottom sheet dialog validating current and new account credentials.',
+          },
+          {
+            src: '/assets/projects/owe/mobile-help-support-modal.png',
+            tag: 'APP 18 // IN-APP HELP & SUPPORT TICKET MODAL',
+            caption: 'Direct Help & Support ticket composer allowing users to submit issues straight into the OWE Admin Support Tickets queue.',
+          },
+        ],
+      },
+      {
+        overline: 'ROLE MODULE 02 // NEXT.JS 15 & TAILWIND v4 WEB ADMIN CONSOLE (9 SCREENS)',
+        title: 'Next.js 15 Admin',
+        titleAccent: 'web console.',
+        description:
+          'Full-stack operations and analytics console built with Next.js 15 (App Router, Turbopack, Server Actions), React 19, TypeScript, Tailwind CSS v4, and Supabase Service-Role SSR—monitoring portfolio collection health, users, debts, payments, audit trails, support tickets, real-time announcements, and dynamic JSONB app config.',
+        items: [
+          {
+            src: '/assets/projects/owe/admin-dashboard.png',
+            tag: 'ADMIN 01 // EXECUTIVE OVERVIEW & COLLECTION ANALYTICS',
+            caption: 'Admin Overview featuring Total Collected (₱49,620.00), KPI cards, Collection Rate radial gauge (28% Collected of ₱174,894.29 portfolio), 6-Month Collections bar chart, Portfolio Health breakdown, Payments by Method (GCash), and Recent Debt Audit Activity.',
+          },
+          {
+            src: '/assets/projects/owe/admin-users.png',
+            tag: 'ADMIN 02 // REGISTERED USERS & PSGC DIRECTORY',
+            caption: 'Paginated user profiles table displaying Full Name, Supabase User UUID, Phone number, PSGC Barangay/Municipality/Province location, and Joined date.',
+          },
+          {
+            src: '/assets/projects/owe/admin-debts.png',
+            tag: 'ADMIN 03 // MASTER DEBTS SUMMARY LEDGER',
+            caption: 'All debt records queried from the PostgreSQL debt_summary view showing Outstanding Balance (₱125,274.29), Overdue count, Total, Paid, Remaining balance, Due Date, and status badges (Awaiting Borrower, Active, Paid).',
+          },
+          {
+            src: '/assets/projects/owe/admin-payments.png',
+            tag: 'ADMIN 04 // PAYMENT VERIFICATION & REFERENCE LOG',
+            caption: 'Master ledger of submitted, confirmed, and rejected borrower payments displaying Amount, Payment Method (GCASH), Reference Number, Date, Status badge, and Proof.',
+          },
+          {
+            src: '/assets/projects/owe/admin-subscriptions.png',
+            tag: 'ADMIN 05 // OWE PRO SUBSCRIPTIONS & BILLING',
+            caption: 'Subscription monitoring module tracking OWE Pro user plans, billing statuses, start dates, and expiration timestamps.',
+          },
+          {
+            src: '/assets/projects/owe/admin-audit-logs.png',
+            tag: 'ADMIN 06 // IMMUTABLE DEBT AUDIT LOGS',
+            caption: 'Immutable audit trail logging system-wide events (Invite Code Generated, Debt Joined, Payment Confirmed, Payment Rejected, Debt Paid) with Debt title/UUID, Actor UUID, and timestamp.',
+          },
+          {
+            src: '/assets/projects/owe/admin-support-tickets.png',
+            tag: 'ADMIN 07 // SUPPORT TICKETS TRIAGE CONSOLE',
+            caption: 'Customer support management table with status filter tabs (All, Open, In Progress, Resolved, Closed), user email, ticket message, and live status dropdown actions.',
+          },
+          {
+            src: '/assets/projects/owe/admin-announcements.png',
+            tag: 'ADMIN 08 // REAL-TIME MOBILE BROADCAST ANNOUNCEMENTS',
+            caption: 'Broadcast composer and history manager for publishing Info, Promo, Warning, and Maintenance banners directly to the Android app via Supabase Realtime.',
+          },
+          {
+            src: '/assets/projects/owe/admin-app-config.png',
+            tag: 'ADMIN 09 // REMOTE APP CONFIG & FEATURE FLAGS',
+            caption: 'Dynamic JSONB remote configuration panel (app_config) controlling ads_enabled, free_active_debt_limit, interstitial_cooldown_minutes, maintenance_mode, pro_lifetime_price, and pro_monthly_price in real time.',
+          },
+        ],
+      },
+    ],
+    artClass: 'art-owe',
+  },
+  {
+    slug: 'scilab-reserve',
+    number: '03',
     category: 'WEB',
     tag: 'SUPABASE + FLUTTER DESKTOP + WEB ECOSYSTEM',
     title: 'SCILAB RESERVE 3.0',
@@ -518,7 +715,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'water-meter-billing',
-    number: '03',
+    number: '04',
     category: 'ANDROID & DESKTOP',
     tag: 'ANDROID STUDIO + JAVAFX + ROBOFLOW VISION + POSTGRESQL',
     title: 'WATER METER BILLING & READING',
@@ -669,7 +866,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'plspcart',
-    number: '04',
+    number: '05',
     category: 'WEB',
     tag: 'PHP + POSTGRESQL / CAMPUS E-COMMERCE',
     title: 'PLSPCART',
