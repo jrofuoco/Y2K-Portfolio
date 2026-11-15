@@ -1245,7 +1245,7 @@ button:focus-visible {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: 50px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .y2k-form {
@@ -1253,6 +1253,17 @@ button:focus-visible {
   flex-direction: column;
   gap: 20px;
   padding: 38px;
+  height: 100%;
+}
+
+.y2k-form .form-group:has(.form-textarea) {
+  flex: 1;
+}
+
+.y2k-form .form-textarea {
+  flex: 1;
+  min-height: 120px;
+  resize: vertical;
 }
 
 .form-group {
