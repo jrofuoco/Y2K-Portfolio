@@ -1,0 +1,248 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { contactInfo } from '../data/portfolio';
+
+const web3FormsKey =
+  import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY || '654169fc-f8ef-4f1c-bc67-d88443af5f34';
+---
+
+<BaseLayout
+  title="Contact Joshua Orlina — Android Engineer & Web Developer"
+  description={contactInfo.intro}
+>
+  <section class="page-hero">
+    <div class="page-hero-hud">
+      <span>TRANSMISSION // JOSHUA ORLINA</span>
+      <span>LOC // CALABARZON, PHILIPPINES</span>
+    </div>
+    <h1>Contact.<br /><em>Let's connect.</em></h1>
+    <p class="page-hero-lead">
+      {contactInfo.intro}
+    </p>
+  </section>
+
+  <section class="section section--deep">
+    <div class="contact-layout">
+      <!-- 01 - 06 Direct Contact Channels List -->
+      <div data-gsap="reveal">
+        <p class="overline" style="margin-bottom: 14px;">CHANNELS // 01 — 06</p>
+        <h2 style="font-size: clamp(30px, 4vw, 52px); margin-bottom: 20px;">
+          Direct<br /><em>links.</em>
+        </h2>
+        <p style="color: var(--ice); line-height: 1.6; margin-bottom: 28px;">
+          {contactInfo.intro}
+        </p>
+
+        <div class="dossier-list" id="contact-dossier">
+          {
+            contactInfo.items.map((item) =>
+              item.href ? (
+                <a
+                  href={item.href}
+                  target={item.external ? '_blank' : undefined}
+                  rel={item.external ? 'noreferrer' : undefined}
+                  class="dossier-item"
+                >
+                  <div class="dossier-row">
+                    <span class="dossier-num">{item.number}</span>
+                    <h3 class="dossier-title">{item.title}</h3>
+                    <p class="dossier-sub">{item.subtitle}</p>
+                    <span class="dossier-symbol" aria-hidden="true">↗</span>
+                  </div>
+                </a>
+              ) : (
+                <div class="dossier-item">
+                  <div class="dossier-row">
+                    <span class="dossier-num">{item.number}</span>
+                    <h3 class="dossier-title">{item.title}</h3>
+                    <p class="dossier-sub">{item.subtitle}</p>
+                    <span class="dossier-symbol" aria-hidden="true">—</span>
+                  </div>
+                </div>
+              )
+            )
+          }
+        </div>
+      </div>
+
+      <!-- Interactive Y2K Transmission Form (Powered by Web3Forms API) -->
+      <form
+        class="hud-frame y2k-form"
+        id="contact-form"
+        data-access-key={web3FormsKey}
+        data-gsap="reveal"
+      >
+        <div class="service-card-top">
+          <span>NEW TRANSMISSION // DIRECT EMAIL</span>
+          <span>TO: JOSHUAORLINA08@GMAIL.COM</span>
+        </div>
+
+        <!-- Honeypot Spam Protection for Web3Forms -->
+        <input type="checkbox" name="botcheck" style="display: none;" tabindex="-1" autocomplete="off" />
+
+        <div class="form-group">
+          <label for="name">01 // YOUR NAME</label>
+          <input
+            class="form-input"
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your name or company"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">02 // YOUR EMAIL</label>
+          <input
+            class="form-input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="name@company.com"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="service">03 // OPPORTUNITY TYPE</label>
+          <select class="form-select" id="service" name="service">
+            <option value="Android Application">Android Application</option>
+            <option value="Website / Web App">Website / Web Development</option>
+            <option value="Junior Engineer Role">Junior Engineer for Your Team</option>
+            <option value="General Inquiry">General Collaboration</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">04 // MESSAGE</label>
+          <textarea
+            class="form-textarea"
+            id="message"
+            name="message"
+            rows="4"
+            placeholder="Tell me about your project, team role, or timeline..."
+            required></textarea>
+        </div>
+
+        <div
+          id="form-status"
+          role="status"
+          aria-live="polite"
+          style="display: none; padding: 12px 16px; border: 1px solid rgba(119, 255, 182, 0.55); background: rgba(6, 36, 86, 0.75); font-family: var(--font-display); font-size: 10px; letter-spacing: 0.08em; line-height: 1.6;"
+        ></div>
+
+        <div>
+          <button type="submit" class="y2k-btn y2k-btn--light" id="submit-btn" data-magnetic>
+            <span id="submit-btn-text">SEND EMAIL <span>↗</span></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    import gsap from 'gsap';
+
+    function initContactPage() {
+      const rows = document.querySelectorAll('#contact-dossier .dossier-item');
+      if (rows.length) {
+        gsap.fromTo(
+          rows,
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.55, stagger: 0.08, ease: 'power3.out' }
+        );
+      }
+
+      const form = document.getElementById('contact-form') as HTMLFormElement | null;
+      const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+      const btnText = document.getElementById('submit-btn-text');
+      const statusBox = document.getElementById('form-status');
+      if (!form || !btnText || !statusBox || !submitBtn) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const name = String(formData.get('name') || '').trim();
+        const email = String(formData.get('email') || '').trim();
+        const service = String(formData.get('service') || 'Inquiry').trim();
+        const message = String(formData.get('message') || '').trim();
+        const accessKey = (form.getAttribute('data-access-key') || '').trim();
+
+        submitBtn.disabled = true;
+        btnText.innerHTML = 'SENDING TRANSMISSION... <span>✦</span>';
+        statusBox.style.display = 'block';
+        statusBox.style.borderColor = 'rgba(169, 196, 255, 0.65)';
+        statusBox.style.color = '#d9e8ff';
+        statusBox.textContent = '● CONNECTING TO TRANSMISSION RELAY...';
+
+        try {
+          let response: Response;
+
+          if (accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY') {
+            // Primary: Web3Forms API
+            response = await fetch('https://api.web3forms.com/submit', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+              },
+              body: JSON.stringify({
+                access_key: accessKey,
+                subject: `[Portfolio] ${service} — from ${name}`,
+                from_name: 'Joshua Orlina Portfolio',
+                name,
+                email,
+                replyto: email,
+                opportunity_type: service,
+                message,
+                botcheck: formData.get('botcheck') || '',
+              }),
+            });
+          } else {
+            // Automatic Zero-Config Fallback: FormSubmit AJAX directly to joshuaorlina08@gmail.com
+            response = await fetch('https://formsubmit.co/ajax/joshuaorlina08@gmail.com', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+              },
+              body: JSON.stringify({
+                _subject: `[Portfolio] ${service} — from ${name}`,
+                _replyto: email,
+                _template: 'table',
+                Name: name,
+                Email: email,
+                'Opportunity Type': service,
+                Message: message,
+              }),
+            });
+          }
+
+          const result = await response.json();
+
+          if (response.ok && (result.success === true || result.success === 'true')) {
+            btnText.innerHTML = 'MESSAGE SENT <span>✓</span>';
+            statusBox.style.borderColor = '#77ffb6';
+            statusBox.style.color = '#77ffb6';
+            statusBox.textContent =
+              '✓ TRANSMISSION DELIVERED DIRECTLY TO JOSHUAORLINA08@GMAIL.COM.';
+            form.reset();
+          } else {
+            throw new Error(result.message || 'Submission failed');
+          }
+        } catch (err: any) {
+          btnText.innerHTML = 'RETRY SEND <span>↗</span>';
+          statusBox.style.borderColor = '#ff7b9c';
+          statusBox.style.color = '#ffb8c9';
+          statusBox.textContent = `⚠ TRANSMISSION ERROR: ${err?.message || 'Unable to send right now. Please email joshuaorlina08@gmail.com directly.'}`;
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    }
+
+    document.addEventListener('astro:page-load', initContactPage);
+  </script>
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+const pathname = Astro.url.pathname;
+const isActive = (path: string) => {
+  if (path === '/') return pathname === '/';
+  return pathname.startsWith(path);
+};
+---
+
+<header class="header">
+  <div class="header-left">
+    <a class="logo" href="/" data-magnetic>
+      JOSHUA ORLINA<span class="logo-star">✦</span>
+    </a>
+    <div class="header-status" aria-label="Portfolio status">
+      <span class="status-dot"></span>
+      <span>PORTFOLIO / 2026 // V2.6 ONLINE</span>
+    </div>
+  </div>
+
+  <nav aria-label="Main navigation">
+    <a href="/" class:list={['nav-link', { active: isActive('/') }]}>Home</a>
+    <a href="/projects" class:list={['nav-link', { active: isActive('/projects') }]}>Work</a>
+    <a href="/services" class:list={['nav-link', { active: isActive('/services') }]}>Services</a>
+    <a href="/about" class:list={['nav-link', { active: isActive('/about') }]}>About</a>
+    <a href="/contact" class:list={['nav-cta', { active: isActive('/contact') }]} data-magnetic>
+      Contact ↗
+    </a>
+  </nav>
+</header>

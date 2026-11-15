@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { projects } from '../../data/portfolio';
+
+const categories = ['ALL', 'WEB', 'ANDROID & DESKTOP'];
+---
+
+<BaseLayout
+  title="Selected Work & Projects — Joshua Orlina"
+  description="Explore Joshua Orlina's Android, Desktop, and full-stack Web engineering projects."
+>
+  <section class="page-hero">
+    <div class="page-hero-hud">
+      <span>ARCHIVE // 0{projects.length} SELECTED WORKS</span>
+      <span>SYS.MODE // INTERACTIVE INDEX</span>
+    </div>
+    <h1>Selected<br /><em>Work & Archive.</em></h1>
+    <p class="page-hero-lead">
+      A curated index of native Android applications, desktop administration suites, and full-stack web platforms built for real-world operations.
+    </p>
+  </section>
+
+  <section class="section section--deep">
+    <!-- Interactive GSAP Category Filter -->
+    <div class="filter-bar" role="tablist" aria-label="Filter projects by category">
+      {
+        categories.map((cat, idx) => (
+          <button
+            type="button"
+            class:list={['filter-btn', { 'is-active': idx === 0 }]}
+            data-filter={cat}
+          >
+            {cat === 'ALL' ? `ALL WORKS (0${projects.length})` : `+ ${cat}`}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="projects-grid projects-grid--two" id="projects-archive-grid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--cobalt" style="text-align: center;">
+    <div data-gsap="reveal">
+      <p class="overline">NEED A CUSTOM BUILD?</p>
+      <h2>Your project<br /><em>belongs here.</em></h2>
+      <div style="margin-top: 28px;">
+        <a href="/contact" class="y2k-btn y2k-btn--light" data-magnetic>
+          <span>BOOK A PROJECT <span>→</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import gsap from 'gsap';
+
+    function initProjectFilters() {
+      const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+      const cards = document.querySelectorAll<HTMLElement>('#projects-archive-grid .project-card');
+      if (!buttons.length || !cards.length) return;
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const filter = btn.getAttribute('data-filter') || 'ALL';
+
+          buttons.forEach((b) => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+
+          const matching: HTMLElement[] = [];
+          const hidden: HTMLElement[] = [];
+
+          cards.forEach((card) => {
+            const cat = card.getAttribute('data-category');
+            if (filter === 'ALL' || cat === filter) {
+              matching.push(card);
+            } else {
+              hidden.push(card);
+            }
+          });
+
+          gsap.to(hidden, {
+            opacity: 0,
+            scale: 0.94,
+            duration: 0.2,
+            onComplete: () => {
+              hidden.forEach((el) => (el.style.display = 'none'));
+              matching.forEach((el) => (el.style.display = 'flex'));
+              gsap.fromTo(
+                matching,
+                { opacity: 0, y: 24, scale: 0.96 },
+                { opacity: 1, y: 0, scale: 1, duration: 0.45, stagger: 0.08, ease: 'power3.out' }
+              );
+            },
+          });
+        });
+      });
+    }
+
+    document.addEventListener('astro:page-load', initProjectFilters);
+  </script>
+</BaseLayout>

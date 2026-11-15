@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { aboutInfo, skills } from '../data/portfolio';
+---
+
+<BaseLayout
+  title="About — Junior Android Engineer & Web Developer"
+  description={aboutInfo.bio}
+>
+  <section class="page-hero">
+    <div class="page-hero-hud">
+      <span>PROFILE // {aboutInfo.location.toUpperCase()}</span>
+      <span>FOCUS // ANDROID & WEB DEVELOPMENT</span>
+    </div>
+    <h1>About.<br /><em>Built to deliver.</em></h1>
+    <p class="page-hero-lead">
+      {aboutInfo.bio}
+    </p>
+  </section>
+
+  <!-- Bio + Portrait HUD + 01–05 Dossier -->
+  <section class="section section--deep">
+    <div class="about-grid">
+      <div class="portrait-card" data-tilt data-gsap="reveal">
+        <div class="portrait-hud-overlay">
+          <div style="display:flex; justify-content:space-between;">
+            <span>OPERATOR // JOSHUA ORLINA</span>
+            <span>AGE // 24</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>LOC // CALABARZON, PH</span>
+            <span>STATUS // ACTIVE</span>
+          </div>
+        </div>
+        <img src="/assets/portrait.png" alt="Portrait of Junior Android Engineer and Web Developer" />
+      </div>
+
+      <div data-gsap="reveal">
+        <p class="overline">ABOUT // OPERATOR DOSSIER</p>
+        <h2 style="margin-bottom: 20px;">Practical problems.<br /><em>Reliable products.</em></h2>
+        <p style="font-size: 20px; line-height: 1.6; color: var(--ice-bright); margin-bottom: 32px;">
+          {aboutInfo.bio}
+        </p>
+
+        <!-- 01 - 05 Dossier Rows -->
+        <div class="dossier-list" id="about-dossier">
+          {
+            aboutInfo.items.map((item) => (
+              <div
+                class:list={['dossier-item', { 'is-expandable': item.symbol === '+' }]}
+                data-expandable={item.symbol === '+' ? 'true' : 'false'}
+              >
+                <div class="dossier-row">
+                  <span class="dossier-num">{item.number}</span>
+                  <h3 class="dossier-title">{item.title}</h3>
+                  <p class="dossier-sub">{item.subtitle}</p>
+                  <span class="dossier-symbol" aria-hidden="true">{item.symbol}</span>
+                </div>
+                {item.details && (
+                  <div class="dossier-details">
+                    <p style="margin: 0 0 22px;">{item.details}</p>
+                  </div>
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Telemetry / Skill Bars -->
+  <section class="section section--cobalt">
+    <div class="section-head" data-gsap="reveal">
+      <div>
+        <p class="overline">TELEMETRY // TECHNICAL STACK</p>
+        <h2>Core<br /><em>capabilities.</em></h2>
+      </div>
+      <p>Focused on native Android engineering, modern web development, and dependable system architecture.</p>
+    </div>
+
+    <div class="hud-frame" style="padding: 36px; max-width: 900px; margin: 0 auto;" data-gsap="reveal">
+      <p class="overline" style="margin-bottom: 24px;">CREATIVE & ENGINEERING MODE // ACTIVE METRICS</p>
+      {
+        skills.map((skill) => (
+          <div class="skill-meter">
+            <div class="skill-meter-head">
+              <span>+ {skill.name}</span>
+              <span>{skill.level}%</span>
+            </div>
+            <div class="skill-meter-track">
+              <div class="skill-meter-fill" data-skill-level={skill.level} />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <script>
+    import gsap from 'gsap';
+
+    function initAboutDossier() {
+      const items = document.querySelectorAll<HTMLElement>('#about-dossier .dossier-item');
+      if (!items.length) return;
+
+      gsap.fromTo(
+        items,
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
+      );
+
+      items.forEach((item) => {
+        if (item.dataset.expandable !== 'true') return;
+        const details = item.querySelector<HTMLElement>('.dossier-details');
+        if (!details) return;
+
+        item.addEventListener('click', () => {
+          const isOpen = item.classList.toggle('is-open');
+          if (isOpen) {
+            gsap.to(details, {
+              maxHeight: 160,
+              opacity: 1,
+              duration: 0.35,
+              ease: 'power2.out',
+            });
+          } else {
+            gsap.to(details, {
+              maxHeight: 0,
+              opacity: 0,
+              duration: 0.25,
+              ease: 'power2.in',
+            });
+          }
+        });
+      });
+    }
+
+    document.addEventListener('astro:page-load', initAboutDossier);
+  </script>
+</BaseLayout>

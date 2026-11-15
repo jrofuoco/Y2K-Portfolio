@@ -1,0 +1,263 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { projects, type Project } from '../../data/portfolio';
+
+export function getStaticPaths() {
+  return projects.map((project, index) => {
+    const nextProject = projects[(index + 1) % projects.length];
+    return {
+      params: { slug: project.slug },
+      props: { project, nextProject },
+    };
+  });
+}
+
+interface Props {
+  project: Project;
+  nextProject: Project;
+}
+
+const { project, nextProject } = Astro.props;
+---
+
+<BaseLayout title={`${project.title} — Case Study | Joshua Orlina`} description={project.summary}>
+  <section class="page-hero">
+    <div class="page-hero-hud">
+      <a href="/projects" style="color: #fff;">← BACK TO ARCHIVE</a>
+      <span>CASE STUDY // {project.number} — {project.category}</span>
+    </div>
+    <h1>{project.title}<br /><em>{project.year}</em></h1>
+    <p class="page-hero-lead">{project.summary}</p>
+
+    {
+      project.techStack && (
+        <div class="tech-pills">
+          {project.techStack.map((tech) => (
+            <span class="tech-pill">+ {tech}</span>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      project.liveUrl && (
+        <div style="margin-top: 24px;">
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noreferrer"
+            class="y2k-btn y2k-btn--light"
+            data-magnetic
+          >
+            <span>LAUNCH LIVE WEB APP <span>↗</span></span>
+          </a>
+        </div>
+      )
+    }
+  </section>
+
+  <section class="section section--deep">
+    <!-- Hero Visual Banner for Project -->
+    <div
+      class={`project-art ${project.artClass}`}
+      style="height: clamp(280px, 46vw, 540px); margin-bottom: 40px;"
+      data-gsap="reveal"
+    >
+      <div class="project-art-top">
+        <span class="project-badge">{project.number} / {project.tag}</span>
+        <span class="project-badge">ORG // {project.client}</span>
+      </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="metrics-grid">
+      {
+        project.metrics.map((metric) => (
+          <div class="hud-frame metric-box" data-gsap="card">
+            <div class="metric-value">{metric.value}</div>
+            <div class="metric-label">{metric.label}</div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Confidential Enterprise Note (if present) -->
+    {
+      project.confidentialNote && (
+        <div class="hud-frame confidential-banner" data-gsap="reveal">
+          <span class="overline" style="color: #77ffb6;">
+            ● INTERNAL ENTERPRISE SYSTEM // SCREENSHOT & FEATURE BRIEF
+          </span>
+          <p>{project.confidentialNote}</p>
+        </div>
+      )
+    }
+
+    <!-- Project Breakdown -->
+    <div class="services-grid" style="margin-top: 40px;">
+      <div class="hud-frame service-card" data-gsap="reveal">
+        <div>
+          <div class="service-card-top">
+            <span>01 // THE CHALLENGE</span>
+            <span>ROLE: {project.role}</span>
+          </div>
+          <h3>PROBLEM & GOAL</h3>
+          <p>{project.challenge}</p>
+        </div>
+      </div>
+
+      <div class="hud-frame service-card" data-gsap="reveal">
+        <div>
+          <div class="service-card-top">
+            <span>02 // THE SOLUTION</span>
+            <span>YEAR: {project.year}</span>
+          </div>
+          <h3>END-TO-END EXECUTION</h3>
+          <p>{project.solution}</p>
+        </div>
+        <ul class="deliverables-list" style="grid-template-columns: 1fr;">
+          {project.deliverables.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Grouped Screenshots Gallery (Professor Portal, Student Portal, Admin Desktop App) -->
+    {
+      project.screenshotGroups && project.screenshotGroups.length > 0 && (
+        <div class="filter-bar" style="margin-top: 64px; margin-bottom: -24px;" data-gsap="reveal">
+          {project.screenshotGroups.map((group, idx) => (
+            <a href={`#module-${idx + 1}`} class="filter-btn">
+              0{idx + 1} // {group.title.toUpperCase()} {group.titleAccent.replace('.', '').toUpperCase()} ({group.items.length})
+            </a>
+          ))}
+        </div>
+      )
+    }
+    {
+      project.screenshotGroups &&
+        project.screenshotGroups.map((group, idx) => (
+          <div id={`module-${idx + 1}`} style="margin-top: 72px; scroll-margin-top: 100px;" data-gsap="reveal">
+            <div class="section-head" style="margin-bottom: 32px;">
+              <div>
+                <p class="overline">{group.overline}</p>
+                <h2 style="font-size: clamp(30px, 4.5vw, 58px);">
+                  {group.title}<br /><em>{group.titleAccent}</em>
+                </h2>
+              </div>
+              <p>{group.description}</p>
+            </div>
+
+            <div class={group.portrait ? 'mobile-screenshot-grid' : 'screenshot-grid'}>
+              {group.items.map((shot) => (
+                <a
+                  href={shot.src}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="hud-frame screenshot-card"
+                  data-gsap="card"
+                >
+                  <div class={group.portrait ? 'mobile-img-wrap' : 'screenshot-img-wrap'}>
+                    <img src={shot.src} alt={shot.caption} loading="lazy" />
+                  </div>
+                  <div class="screenshot-caption">
+                    <span>{shot.tag} ↗</span>
+                    <p>{shot.caption}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+    }
+
+    <!-- Single Screenshots Gallery (if present) -->
+    {
+      project.screenshots && project.screenshots.length > 0 && (
+        <div style="margin-top: 72px;" data-gsap="reveal">
+          <div class="section-head" style="margin-bottom: 32px;">
+            <div>
+              <p class="overline">INTERFACE CAPTURES // 01 — 0{project.screenshots.length}</p>
+              <h2 style="font-size: clamp(30px, 4.5vw, 58px);">
+                System<br /><em>screens.</em>
+              </h2>
+            </div>
+            <p>
+              Select interface captures from the Laravel web portal. Click any screen to view full resolution.
+            </p>
+          </div>
+
+          <div class="screenshot-grid">
+            {project.screenshots.map((shot) => (
+              <a
+                href={shot.src}
+                target="_blank"
+                rel="noreferrer"
+                class="hud-frame screenshot-card"
+                data-gsap="card"
+              >
+                <div class="screenshot-img-wrap">
+                  <img src={shot.src} alt={shot.caption} loading="lazy" />
+                </div>
+                <div class="screenshot-caption">
+                  <span>{shot.tag} ↗</span>
+                  <p>{shot.caption}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <!-- POV / Behind-the-Build Photos Gallery (if present) -->
+    {
+      project.povPhotos && project.povPhotos.length > 0 && (
+        <div style="margin-top: 72px;" data-gsap="reveal">
+          <div class="section-head" style="margin-bottom: 32px;">
+            <div>
+              <p class="overline">BEHIND THE BUILD // POV & DEV LOG (01 — 0{project.povPhotos.length})</p>
+              <h2 style="font-size: clamp(30px, 4.5vw, 58px);">
+                From whiteboard<br /><em>to boardroom.</em>
+              </h2>
+            </div>
+            <p>
+              Real POV snapshots from 6-hour architecture meetings, VS Code Laravel sessions, AuditFeed social testing, and stakeholder demos.
+            </p>
+          </div>
+
+          <div class="pov-grid">
+            {project.povPhotos.map((pov) => (
+              <a
+                href={pov.src}
+                target="_blank"
+                rel="noreferrer"
+                class="hud-frame screenshot-card"
+                data-gsap="card"
+              >
+                <div class="pov-img-wrap">
+                  <img src={pov.src} alt={pov.caption} loading="lazy" />
+                </div>
+                <div class="screenshot-caption">
+                  <span>{pov.tag} ↗</span>
+                  <p>{pov.caption}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </section>
+
+  <!-- Next Project Navigation -->
+  <section class="section section--cobalt" style="text-align: center;">
+    <div data-gsap="reveal">
+      <p class="overline">NEXT CASE STUDY // {nextProject.number}</p>
+      <h2>{nextProject.title}</h2>
+      <p style="color: var(--ice); margin: 12px auto 28px;">{nextProject.tag}</p>
+      <a href={`/projects/${nextProject.slug}`} class="y2k-btn y2k-btn--light" data-magnetic>
+        <span>VIEW NEXT PROJECT <span>→</span></span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

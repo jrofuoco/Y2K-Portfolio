@@ -1,0 +1,281 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { aboutInfo, contactInfo, projects, services, servicesInfo } from '../data/portfolio';
+
+const featuredProjects = projects;
+---
+
+<BaseLayout
+  title="Joshua Orlina — Android Engineer & Web Developer Portfolio"
+  description={aboutInfo.bio}
+>
+  <!-- Y2K Concept Hero with Interactive Hotspots & GSAP Sparkles -->
+  <section class="hero mockup-hero" aria-label="Creative portfolio introduction">
+    <img
+      class="hero-bg-art"
+      src="/assets/portfolio-concept.png"
+      alt="Joshua Orlina Creative Future portfolio hero with portrait, chrome title, and project previews"
+    />
+
+    <!-- Animated Y2K Sparkle Flares -->
+    <span class="hero-sparkle sparkle-1" aria-hidden="true">✦</span>
+    <span class="hero-sparkle sparkle-2" aria-hidden="true">✦</span>
+    <span class="hero-sparkle sparkle-3" aria-hidden="true">✧</span>
+    <span class="hero-sparkle sparkle-4" aria-hidden="true">✦</span>
+
+    <!-- Interactive Hotspots linked to the dedicated pages -->
+    <a class="hero-hotspot hero-work" href="/projects" aria-label="Explore all work">
+      <span class="hero-hotspot-badge">OPEN ARCHIVE ↗</span>
+    </a>
+
+    <!-- Hero Bottom Bar Header: Core Platforms (Android, Desktop, Web) -->
+    <div class="hero-domains-header" aria-hidden="true">
+      <span class="hero-domains-title">CORE PLATFORMS</span>
+      <span class="hero-domains-count">03 DOMAINS</span>
+    </div>
+
+    <!-- 01 / ANDROID -->
+    <a
+      class="hero-domain-card hero-project-one"
+      href="/services#android-app-development"
+      aria-label="Android Development — Kotlin, Java, Android Studio & Machine Vision"
+    >
+      <div class="hero-domain-box">
+        <span class="hero-domain-tag">01 / ANDROID</span>
+        <span class="hero-hotspot-badge">EXPLORE ANDROID ↗</span>
+      </div>
+      <div class="hero-domain-caption">
+        <div>
+          <h3>ANDROID APPS</h3>
+          <p>KOTLIN &amp; JAVA / MOBILE &amp; VISION</p>
+        </div>
+        <span class="hero-domain-arrow" aria-hidden="true">↗</span>
+      </div>
+    </a>
+
+    <!-- 02 / DESKTOP -->
+    <a
+      class="hero-domain-card hero-project-two"
+      href="/projects/scilab-reserve#module-3"
+      aria-label="Desktop Applications — Flutter Windows & JavaFX Admin Suites"
+    >
+      <div class="hero-domain-box">
+        <span class="hero-domain-tag">02 / DESKTOP</span>
+        <span class="hero-hotspot-badge">EXPLORE DESKTOP ↗</span>
+      </div>
+      <div class="hero-domain-caption">
+        <div>
+          <h3>DESKTOP SYSTEMS</h3>
+          <p>FLUTTER WINDOWS / JAVAFX ADMIN</p>
+        </div>
+        <span class="hero-domain-arrow" aria-hidden="true">↗</span>
+      </div>
+    </a>
+
+    <!-- 03 / WEB -->
+    <a
+      class="hero-domain-card hero-project-three"
+      href="/services#website-development"
+      aria-label="Web Platforms — Laravel, Supabase, PHP & Modern Web"
+    >
+      <div class="hero-domain-box">
+        <span class="hero-domain-tag">03 / WEB</span>
+        <span class="hero-hotspot-badge">EXPLORE WEB ↗</span>
+      </div>
+      <div class="hero-domain-caption">
+        <div>
+          <h3>WEB PLATFORMS</h3>
+          <p>LARAVEL / SUPABASE / FULL-STACK</p>
+        </div>
+        <span class="hero-domain-arrow" aria-hidden="true">↗</span>
+      </div>
+    </a>
+  </section>
+
+  <!-- Y2K Infinite Ticker Band -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-track" data-ticker>
+      <span class="ticker-item">✦ <span>JOSHUA ORLINA // @JROFUOCO</span></span>
+      <span class="ticker-item">+ <span>JUNIOR ANDROID ENGINEER & WEB DEVELOPER</span></span>
+      <span class="ticker-item">+ <span>CALABARZON, PHILIPPINES</span></span>
+      <span class="ticker-item">+ <span>JIMAC INCORPORATED // ANDROID DEV</span></span>
+      <span class="ticker-item">+ <span>MEGAWORLD CORPORATION // INTERN ALUM</span></span>
+      <span class="ticker-item">✦ <span>OPEN TO ANDROID & WEB OPPORTUNITIES</span></span>
+      <span class="ticker-item">✦ <span>JOSHUA ORLINA // @JROFUOCO</span></span>
+      <span class="ticker-item">+ <span>JUNIOR ANDROID ENGINEER & WEB DEVELOPER</span></span>
+      <span class="ticker-item">+ <span>CALABARZON, PHILIPPINES</span></span>
+      <span class="ticker-item">+ <span>JIMAC INCORPORATED // ANDROID DEV</span></span>
+      <span class="ticker-item">+ <span>MEGAWORLD CORPORATION // INTERN ALUM</span></span>
+      <span class="ticker-item">✦ <span>OPEN TO ANDROID & WEB OPPORTUNITIES</span></span>
+    </div>
+  </div>
+
+  <!-- Selected Work Section -->
+  <section class="section section--light" id="work">
+    <div class="section-head" data-gsap="reveal">
+      <div>
+        <p class="overline">THE PORTFOLIO // SELECTED WORK</p>
+        <h2>Made to be<br /><em>remembered.</em></h2>
+      </div>
+      <div>
+        <p style="margin-bottom: 18px;">
+          Practical problems turned into clear, reliable Android and web products.
+        </p>
+        <a href="/projects" class="y2k-btn" data-magnetic>
+          <span>VIEW ALL PROJECTS <span>→</span></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="projects-grid projects-grid--two">
+      {featuredProjects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <!-- About Section (with 01-05 Dossier on Home) -->
+  <section class="section section--cobalt" id="about">
+    <div class="about-grid">
+      <div class="portrait-card" data-tilt data-gsap="reveal">
+        <div class="portrait-hud-overlay">
+          <div style="display:flex; justify-content:space-between;">
+            <span>OPERATOR // JOSHUA ORLINA</span>
+            <span>CREATIVE MODE: 78%</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>LOC // CALABARZON, PH</span>
+            <span>24 YRS OLD</span>
+          </div>
+        </div>
+        <img src="/assets/portrait.png" alt="Joshua Orlina portrait" />
+      </div>
+
+      <div data-gsap="reveal">
+        <p class="overline">ABOUT // JOSHUA ORLINA</p>
+        <h2 style="margin-bottom: 20px;">Built different.<br /><em>Made to create.</em></h2>
+        <p style="font-size: 19px; line-height: 1.55; color: var(--ice-bright); margin-bottom: 24px;">
+          {aboutInfo.bio}
+        </p>
+
+        <div class="dossier-list" style="margin-bottom: 28px;">
+          {
+            aboutInfo.items.map((item) => (
+              <div class="dossier-item">
+                <div class="dossier-row" style="padding: 16px 12px;">
+                  <span class="dossier-num">{item.number}</span>
+                  <h3 class="dossier-title" style="font-size: 15px;">{item.title}</h3>
+                  <p class="dossier-sub" style="font-size: 13px;">{item.subtitle}</p>
+                  <span class="dossier-symbol">{item.symbol}</span>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <a href="/about" class="y2k-btn y2k-btn--light" data-magnetic>
+          <span>FULL ABOUT PROFILE <span>→</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Snapshot Section -->
+  <section class="section section--deep" id="services">
+    <div class="section-head" data-gsap="reveal">
+      <div>
+        <p class="overline">SERVICES // 01 — 03</p>
+        <h2>Android & Web<br /><em>development.</em></h2>
+      </div>
+      <div>
+        <p style="margin-bottom: 18px;">
+          {servicesInfo.intro}
+        </p>
+        <a href="/services" class="y2k-btn" data-magnetic>
+          <span>EXPLORE SERVICES <span>→</span></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="dossier-list" style="margin-bottom: 40px;" data-gsap="reveal">
+      {
+        services.map((service) => (
+          <a href={`/services#${service.id}`} class="dossier-item">
+            <div class="dossier-row">
+              <span class="dossier-num">{service.number}</span>
+              <h3 class="dossier-title">{service.title}</h3>
+              <p class="dossier-sub">{service.subtitle}</p>
+              <span class="dossier-symbol" aria-hidden="true">{service.symbol}</span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="projects-grid">
+      {
+        services.map((service) => (
+          <div class="hud-frame service-card" data-gsap="card">
+            <div>
+              <div class="service-card-top">
+                <span>{service.number} // SERVICE</span>
+                <span>{service.hudCode}</span>
+              </div>
+              <h3 style="text-transform: uppercase;">{service.title}</h3>
+              <p style="font-weight: 600; color: #fff; margin-bottom: 8px;">{service.subtitle}</p>
+              <p>{service.description}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Contact Section (01-06 Direct Channels on Home) -->
+  <section class="section section--deep" id="contact" style="border-top: 1px solid var(--border-glow);">
+    <div class="section-head" data-gsap="reveal">
+      <div>
+        <p class="overline">CONTACT // 01 — 06</p>
+        <h2>Let's make<br /><em>something</em> happen.</h2>
+      </div>
+      <div>
+        <p style="margin-bottom: 18px;">
+          {contactInfo.intro}
+        </p>
+        <a href="/contact" class="y2k-btn" data-magnetic>
+          <span>OPEN CONTACT PAGE <span>↗</span></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="dossier-list" data-gsap="reveal">
+      {
+        contactInfo.items.map((item) =>
+          item.href ? (
+            <a
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noreferrer' : undefined}
+              class="dossier-item"
+            >
+              <div class="dossier-row">
+                <span class="dossier-num">{item.number}</span>
+                <h3 class="dossier-title">{item.title}</h3>
+                <p class="dossier-sub">{item.subtitle}</p>
+                <span class="dossier-symbol" aria-hidden="true">↗</span>
+              </div>
+            </a>
+          ) : (
+            <div class="dossier-item">
+              <div class="dossier-row">
+                <span class="dossier-num">{item.number}</span>
+                <h3 class="dossier-title">{item.title}</h3>
+                <p class="dossier-sub">{item.subtitle}</p>
+                <span class="dossier-symbol" aria-hidden="true">—</span>
+              </div>
+            </div>
+          )
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
