@@ -1222,39 +1222,56 @@ button:focus-visible {
   color: var(--ice);
 }
 
-/* Y2K Segmented Progress / Skill Bars (matches CREATIVE MODE 78% in concept art) */
-.skill-meter {
-  margin-bottom: 18px;
+/* Technical Stack Categories Grid (About page) */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
 }
 
-.skill-meter-head {
+.stack-card {
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stack-card-head {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(169, 196, 255, 0.28);
+}
+
+.stack-card-num {
   font-family: var(--font-display);
-  font-size: 10px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+}
+
+.stack-card-ctx {
+  font-family: var(--font-display);
+  font-size: 9px;
   letter-spacing: 0.08em;
-  margin-bottom: 8px;
+  color: var(--ice);
+  padding: 4px 10px;
+  border: 1px solid rgba(169, 196, 255, 0.4);
+  background: rgba(7, 66, 184, 0.28);
+}
+
+.stack-card-exp {
+  margin: 0;
   color: var(--ice-bright);
+  font-size: 14.5px;
+  line-height: 1.65;
 }
 
-.skill-meter-track {
-  height: 12px;
-  border: 1px solid rgba(200, 220, 255, 0.65);
-  padding: 2px;
-  background: rgba(2, 11, 43, 0.65);
-}
-
-.skill-meter-fill {
-  height: 100%;
-  width: 0%;
-  background: repeating-linear-gradient(
-    90deg,
-    #ffffff 0px,
-    #ffffff 10px,
-    transparent 10px,
-    transparent 13px
-  );
-  box-shadow: 0 0 12px rgba(166, 201, 255, 0.85);
+.stack-card .tech-pills {
+  margin-top: auto;
 }
 
 /* Y2K 01-05 About Dossier List */
@@ -1500,13 +1517,62 @@ button:focus-visible {
   background: rgba(6, 30, 92, 0.65);
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.confidential-banner--clearance {
+  border: 1px solid rgba(119, 255, 182, 0.55);
+  border-left: 4px solid #77ffb6;
+  background: linear-gradient(135deg, rgba(8, 52, 118, 0.85), rgba(4, 24, 68, 0.92));
+  box-shadow: 0 0 26px rgba(119, 255, 182, 0.16), inset 0 0 20px rgba(119, 255, 182, 0.07);
+}
+
+.confidential-banner-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.clearance-pill {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  letter-spacing: 0.09em;
+  color: #77ffb6;
+  padding: 5px 12px;
+  border: 1px solid rgba(119, 255, 182, 0.65);
+  background: rgba(119, 255, 182, 0.12);
+  box-shadow: 0 0 12px rgba(119, 255, 182, 0.22);
+}
+
+.clearance-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #77ffb6;
+  box-shadow: 0 0 8px #77ffb6;
+  animation: clearancePulse 1.8s ease-in-out infinite;
+}
+
+@keyframes clearancePulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
 }
 
 .confidential-banner p {
   margin: 0;
   color: var(--ice-bright);
-  line-height: 1.6;
+  line-height: 1.65;
   font-size: 15px;
 }
 
@@ -1687,6 +1753,7 @@ button:focus-visible {
   .projects-grid,
   .projects-grid--two,
   .services-grid,
+  .stack-grid,
   .about-grid,
   .contact-layout {
     grid-template-columns: 1fr;

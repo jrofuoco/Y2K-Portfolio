@@ -151,25 +151,7 @@ const {
           }
         });
 
-        // 7. Segmented Y2K Skill Meter Bars (CREATIVE MODE style)
-        gsap.utils.toArray<HTMLElement>('[data-skill-level]').forEach((bar) => {
-          const targetWidth = bar.getAttribute('data-skill-level') || '80';
-          gsap.fromTo(
-            bar,
-            { width: '0%' },
-            {
-              width: `${targetWidth}%`,
-              duration: 1.25,
-              ease: 'steps(14)',
-              scrollTrigger: {
-                trigger: bar,
-                start: 'top 88%',
-              },
-            }
-          );
-        });
-
-        // 8. 3D Y2K Card Tilt on Hover
+        // 7. 3D Y2K Card Tilt on Hover
         document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
           card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();

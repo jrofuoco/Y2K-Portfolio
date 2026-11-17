@@ -85,10 +85,21 @@ const { project, nextProject } = Astro.props;
     <!-- Confidential Enterprise / Status Note (if present) -->
     {
       project.confidentialNote && (
-        <div class="hud-frame confidential-banner" data-gsap="reveal">
-          <span class="overline" style="color: #77ffb6;">
-            {project.confidentialTitle ?? '● INTERNAL ENTERPRISE SYSTEM // SCREENSHOT & FEATURE BRIEF'}
-          </span>
+        <div
+          class:list={['hud-frame', 'confidential-banner', { 'confidential-banner--clearance': Boolean(project.clearanceBadge) }]}
+          data-gsap="reveal"
+        >
+          <div class="confidential-banner-head">
+            <span class="overline" style="color: #77ffb6;">
+              {project.confidentialTitle ?? '● INTERNAL ENTERPRISE SYSTEM // SCREENSHOT & FEATURE BRIEF'}
+            </span>
+            {project.clearanceBadge && (
+              <span class="clearance-pill">
+                <span class="clearance-dot" aria-hidden="true" />
+                {project.clearanceBadge}
+              </span>
+            )}
+          </div>
           <p>{project.confidentialNote}</p>
         </div>
       )

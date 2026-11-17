@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { aboutInfo, skills } from '../data/portfolio';
+import { aboutInfo, skillCategories } from '../data/portfolio';
 ---
 
 <BaseLayout
@@ -69,29 +69,31 @@ import { aboutInfo, skills } from '../data/portfolio';
     </div>
   </section>
 
-  <!-- Technical Telemetry / Skill Bars -->
+  <!-- Technical Stack & Applied Experience -->
   <section class="section section--cobalt">
     <div class="section-head" data-gsap="reveal">
       <div>
         <p class="overline">TELEMETRY // TECHNICAL STACK</p>
         <h2>Core<br /><em>capabilities.</em></h2>
       </div>
-      <p>Focused on native Android engineering, modern web development, and dependable system architecture.</p>
+      <p>Technology categories grounded in production work, shipped systems, and hands-on engineering.</p>
     </div>
 
-    <div class="hud-frame" style="padding: 36px; max-width: 900px; margin: 0 auto;" data-gsap="reveal">
-      <p class="overline" style="margin-bottom: 24px;">CREATIVE & ENGINEERING MODE // ACTIVE METRICS</p>
+    <div class="stack-grid" data-gsap="reveal">
       {
-        skills.map((skill) => (
-          <div class="skill-meter">
-            <div class="skill-meter-head">
-              <span>+ {skill.name}</span>
-              <span>{skill.level}%</span>
+        skillCategories.map((group) => (
+          <article class="hud-frame stack-card" data-gsap="card">
+            <div class="stack-card-head">
+              <span class="stack-card-num">{group.number} // {group.category}</span>
+              <span class="stack-card-ctx">{group.context}</span>
             </div>
-            <div class="skill-meter-track">
-              <div class="skill-meter-fill" data-skill-level={skill.level} />
+            <p class="stack-card-exp">{group.experience}</p>
+            <div class="tech-pills">
+              {group.technologies.map((tech) => (
+                <span class="tech-pill">+ {tech}</span>
+              ))}
             </div>
-          </div>
+          </article>
         ))
       }
     </div>

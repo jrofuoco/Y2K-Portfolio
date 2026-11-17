@@ -28,6 +28,7 @@ export interface Project {
   liveUrl?: string;
   confidentialTitle?: string;
   confidentialNote?: string;
+  clearanceBadge?: string;
   screenshots?: { src: string; caption: string; tag: string }[];
   screenshotGroups?: ScreenshotGroup[];
   povPhotos?: { src: string; caption: string; tag: string }[];
@@ -184,8 +185,10 @@ export const projects: Project[] = [
       { label: 'RBAC ROLES', value: '6+ TIERS' },
     ],
     techStack: ['Laravel', 'PHP', 'MySQL / Relational DB', 'JavaScript', 'RBAC & Permissions', 'REST / AJAX', 'Full-Stack Deployment'],
+    clearanceBadge: 'PERMISSION GRANTED · TEST DATA ONLY',
+    confidentialTitle: '● PUBLIC SHOWCASE CLEARANCE // APPROVED NON-SENSITIVE SCREENS',
     confidentialNote:
-      'Note: Because Audit Portal is a private internal enterprise system built for Megaworld Corporation, public screenshots are limited to select non-sensitive screens. Beyond the screens shown below, the platform includes the interactive AuditFeed social stream (creating posts, threaded comments, likes/reactions, content flagging, and approval workflows), department Groups, and Auditor Leaderboards.',
+      'Disclaimer: All Audit Portal screenshots and behind-the-build photos shown here are displayed with explicit permission. Everything visible inside the screens is dummy/test data I created myself during active development and testing—no real company records, confidential financial figures, or private employee information are exposed. Beyond the screens below, the internal system also includes the interactive AuditFeed social stream (posts, comments, likes, flagging, and approvals), department Groups, and Auditor Leaderboards.',
     screenshots: [
       {
         src: '/assets/projects/audit-portal/dashboard.jpg',
@@ -1071,10 +1074,45 @@ export const services: Service[] = [
   },
 ];
 
-export const skills = [
-  { name: 'ANDROID DEVELOPMENT (KOTLIN / JAVA)', level: 92 },
-  { name: 'WEB DEVELOPMENT (HTML / CSS / JS / TS)', level: 90 },
-  { name: 'MODERN FRAMEWORKS & ASTRO / GSAP', level: 86 },
-  { name: 'REST APIS, SQL & SYSTEM INTEGRATION', level: 85 },
-  { name: 'UI/UX & PRACTICAL PROBLEM SOLVING', level: 94 },
+export interface SkillCategory {
+  number: string;
+  category: string;
+  context: string;
+  experience: string;
+  technologies: string[];
+}
+
+export const skillCategories: SkillCategory[] = [
+  {
+    number: '01',
+    category: 'ANDROID & MOBILE',
+    context: 'PRODUCTION · POS & CONSUMER APPS',
+    experience:
+      'Developing and maintaining production Android applications at JIMAC Incorporated with hardware/POS reliability, alongside native Kotlin & Jetpack Compose apps such as OWE. / Debt Collect.',
+    technologies: ['Kotlin', 'Java', 'Jetpack Compose', 'Material 3', 'Android Studio', 'Offline Cache'],
+  },
+  {
+    number: '02',
+    category: 'WEB & FULL-STACK',
+    context: 'ENTERPRISE & MODERN WEB',
+    experience:
+      'Built Megaworld Corporation’s internal Audit Portal end-to-end in Laravel, paired with Next.js 15 / React 19 admin consoles and Astro + GSAP interactive sites.',
+    technologies: ['Laravel (PHP)', 'Next.js 15', 'React 19', 'TypeScript', 'Astro', 'HTML / CSS / JS', 'Tailwind CSS'],
+  },
+  {
+    number: '03',
+    category: 'BACKEND, APIS & DATA',
+    context: 'SYSTEMS & INTEGRATION',
+    experience:
+      'Designing relational schemas, granular role-based access control (RBAC), REST/AJAX endpoints, and real-time auth & data sync with Supabase and SQL databases.',
+    technologies: ['MySQL / SQL', 'Supabase', 'REST APIs', 'Ktor', 'RBAC & Auth', 'Relational DB Design'],
+  },
+  {
+    number: '04',
+    category: 'UI/UX & DELIVERY',
+    context: 'WHITEBOARD TO DEPLOYMENT',
+    experience:
+      'Translating operational requirements into clear multi-role dashboards, responsive mobile workflows, and stakeholder-ready demos from initial architecture through deployment.',
+    technologies: ['UI/UX Systems', 'GSAP Animations', 'Responsive Design', 'System Flowcharts', 'Stakeholder Demos'],
+  },
 ];
