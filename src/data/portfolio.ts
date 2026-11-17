@@ -461,12 +461,13 @@ export const projects: Project[] = [
     challenge:
       'Managing laboratory rooms, chemical stock/expiration, glassware, and equipment across courses and student sections required a strict two-tier verification workflow (Professor endorsement followed by Laboratory Admin approval), atomic inventory holds to prevent double-booking, and full audit trail accountability.',
     solution:
-      'Architected a dual-app ecosystem backed by Supabase. Built the Student & Professor web portals with Vanilla JS and Supabase JS v2 (featuring SMTP Edge Function OTP signup, cart-based resource borrowing, and an interactive 30-minute time-slot scheduler), paired with a Flutter Material 3 Windows Desktop Admin app featuring fl_chart analytics, atomic PL/pgSQL inventory hold RPCs, real-time notifications, audit logs, and PDF/Excel report exports.',
+      'Architected a dual-app ecosystem backed by Supabase. Built the Student & Professor web portals with Vanilla JS and Supabase JS v2 (featuring SMTP Edge Function OTP signup, cart-based resource borrowing, an interactive 30-minute time-slot scheduler, and the read-only Lab AI assistant widget), paired with a Flutter Material 3 Windows Desktop Admin app featuring fl_chart analytics, atomic PL/pgSQL inventory hold RPCs, real-time notifications, audit logs, and PDF/Excel report exports.',
     deliverables: [
       'Student & Professor Web Portals (JavaScript, Supabase JS v2, Vercel)',
       'Flutter Windows Desktop Admin Application (Dart, Material 3, Inno Setup)',
       'Supabase PostgreSQL Schema (12 Tables) & PL/pgSQL Inventory Hold RPCs',
       'Two-Tier Approval Engine (Professor Review → Admin Final Approval)',
+      'Read-Only Lab AI Assistant (Availability, Stock, Reservation Status & Policy Q&A)',
       'Real-Time Notifications, Audit Trail Logging & Stock History',
       'fl_chart Analytics, PDF & Excel Export Reporting',
     ],
@@ -484,6 +485,10 @@ export const projects: Project[] = [
       'fl_chart / PDF & Excel Export',
       'Vercel',
     ],
+    clearanceBadge: 'CLIENT PRIVACY · REDACTED SCREENS',
+    confidentialTitle: '● CLIENT CONFIDENTIALITY // BLURRED & REDACTED DETAILS',
+    confidentialNote:
+      'Disclaimer: Because SciLab Reserve 3.0 was built for a real client institution, certain areas in the screenshots below have been intentionally blurred or removed to protect the client’s identity, institutional branding, and private records.',
     screenshotGroups: [
       {
         overline: 'ROLE MODULE 01 // PROFESSOR PORTAL (10 SCREENS)',
@@ -714,6 +719,30 @@ export const projects: Project[] = [
             src: '/assets/projects/scilab/admin-login.png',
             tag: 'ADM 17 // WINDOWS DESKTOP AUTHENTICATION',
             caption: 'Native Windows desktop sign-in screen for SciLabReserve 2.0 laboratory administrators.',
+          },
+        ],
+      },
+      {
+        overline: 'FEATURE MODULE 04 // LAB AI ASSISTANT (3 SCREENS)',
+        title: 'AI',
+        titleAccent: 'assistant.',
+        description:
+          'Embedded read-only Scilab Assistant ("Lab AI") floating chat widget integrated into the web portal—helping users check live room and item availability, look up chemical stock and expiration status, summarize pending reservations, and answer SciLab policy questions without modifying bookings.',
+        items: [
+          {
+            src: '/assets/projects/scilab/ai-assistant-intro.png',
+            tag: 'AI 01 // LAB AI ASSISTANT WIDGET',
+            caption: 'Floating Lab AI chat drawer introducing Scilab Assistant as a read-only availability, status, and policy helper.',
+          },
+          {
+            src: '/assets/projects/scilab/ai-assistant-stock-query.jpg',
+            tag: 'AI 02 // REAL-TIME STOCK & EXPIRATION QUERY',
+            caption: 'Natural-language inventory lookup resolving chemical queries (e.g., Ethanol C2H5OH) with live stock volume and non-expired status.',
+          },
+          {
+            src: '/assets/projects/scilab/ai-assistant-reservation-status.png',
+            tag: 'AI 03 // RESERVATION & APPROVAL STATUS SUMMARY',
+            caption: 'Instant reservation status check summarizing scheduled date, time window, and pending Admin approval state.',
           },
         ],
       },
