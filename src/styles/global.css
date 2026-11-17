@@ -30,8 +30,12 @@ body {
   background: var(--bg-deep);
   color: #fff;
   font-family: var(--font-sans);
-  overflow-x: hidden;
   position: relative;
+}
+
+main,
+.footer {
+  overflow-x: clip;
 }
 
 /* Subtle Y2K scanline & grid texture overlay */
@@ -85,11 +89,18 @@ button:focus-visible {
   justify-content: center;
 }
 
-.y2k-cursor::after {
-  content: '✦';
+.y2k-cursor-star {
   font-size: 9px;
   color: #fff;
   opacity: 0.85;
+}
+
+.y2k-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
 }
 
 .y2k-cursor.is-active {
@@ -206,13 +217,23 @@ button:focus-visible {
 .header {
   position: sticky;
   top: 0;
-  z-index: 100;
-  height: 76px;
+  z-index: 200;
+  min-height: calc(76px + env(safe-area-inset-top, 0px));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 5%;
-  background: rgba(3, 17, 60, 0.82);
+  gap: 16px;
+  padding: env(safe-area-inset-top, 0px) max(5%, env(safe-area-inset-right, 0px)) 0 max(5%, env(safe-area-inset-left, 0px));
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(3, 17, 60, 0.9);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border-glow);
@@ -222,6 +243,7 @@ button:focus-visible {
   display: flex;
   align-items: center;
   gap: 28px;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -235,10 +257,12 @@ button:focus-visible {
 }
 
 .logo-star {
-  font-size: 18px;
+  font-size: 16px;
   color: var(--ice);
-  text-shadow: 0 0 12px #fff;
-  display: inline-block;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.85));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-status {
@@ -262,7 +286,7 @@ button:focus-visible {
   box-shadow: 0 0 8px #77ffb6;
 }
 
-.header nav {
+.header-nav {
   display: flex;
   align-items: center;
   gap: 30px;
@@ -277,6 +301,7 @@ button:focus-visible {
   padding: 6px 0;
   color: rgba(255, 255, 255, 0.78);
   transition: color 0.2s ease;
+  white-space: nowrap;
 }
 
 .nav-link:hover,
@@ -297,10 +322,14 @@ button:focus-visible {
 }
 
 .nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 9px 16px;
   border: 1px solid rgba(200, 220, 255, 0.65);
   background: rgba(22, 96, 210, 0.35);
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
 }
 
 .nav-cta:hover,
@@ -308,6 +337,137 @@ button:focus-visible {
   background: #eef5ff;
   color: #041442;
   border-color: #fff;
+}
+
+.header-mobile-actions {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.nav-cta--compact {
+  padding: 8px 11px;
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 33px;
+  padding: 0 10px;
+  border: 1px solid rgba(200, 220, 255, 0.55);
+  background: rgba(7, 36, 108, 0.55);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-toggle:hover,
+.header.is-menu-open .nav-toggle {
+  background: #eef5ff;
+  color: #041442;
+  border-color: #fff;
+}
+
+.nav-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.nav-toggle-icon--close {
+  display: none;
+}
+
+.header.is-menu-open .nav-toggle-icon--menu {
+  display: none;
+}
+
+.header.is-menu-open .nav-toggle-icon--close {
+  display: inline-flex;
+}
+
+.mobile-nav-panel[hidden] {
+  display: none !important;
+}
+
+.mobile-nav-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 199;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px max(5%, env(safe-area-inset-right, 0px)) 20px max(5%, env(safe-area-inset-left, 0px));
+  background: rgba(3, 17, 60, 0.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border-glow);
+  box-shadow: 0 18px 40px rgba(2, 11, 43, 0.72);
+}
+
+.mobile-nav-hud {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(169, 196, 255, 0.25);
+  background: rgba(7, 66, 184, 0.2);
+  font-family: var(--font-display);
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  color: var(--ice);
+}
+
+.mobile-nav-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-nav-link {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(169, 196, 255, 0.2);
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  color: #fff;
+  background: rgba(27, 110, 243, 0.18);
+  text-shadow: 0 0 12px rgba(166, 201, 255, 0.85);
+}
+
+.mobile-nav-num {
+  font-size: 9px;
+  color: var(--ice);
+  opacity: 0.85;
+}
+
+.mobile-nav-indicator {
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  color: #77ffb6;
 }
 
 /* HERO SECTION: Hybrid Concept Art + Interactive HUD Overlays */
@@ -340,6 +500,9 @@ button:focus-visible {
 }
 
 .hero-hotspot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-display);
   font-size: 9px;
   letter-spacing: 0.1em;
@@ -541,6 +704,10 @@ button:focus-visible {
 }
 
 .hero-domain-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   font-size: clamp(12px, 1.35vw, 20px);
   line-height: 1;
   color: #030e29;
@@ -553,12 +720,15 @@ button:focus-visible {
 
 /* Animated Y2K Sparkle Flares on Hero */
 .hero-sparkle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   color: #fff;
-  font-size: 26px;
+  font-size: 24px;
   pointer-events: none;
   z-index: 3;
-  text-shadow: 0 0 18px #fff, 0 0 34px #6eb0ff;
+  filter: drop-shadow(0 0 10px #fff) drop-shadow(0 0 22px #6eb0ff);
 }
 
 .sparkle-1 { top: 10%; left: 8%; }
@@ -685,6 +855,12 @@ button:focus-visible {
   font-size: 10px;
   letter-spacing: 0.14em;
   color: var(--ice);
+}
+
+.page-hero-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .page-hero h1 {
@@ -877,12 +1053,13 @@ button:focus-visible {
 }
 
 .project-art-glyph {
+  display: inline-flex;
   position: absolute;
   right: 8%;
   bottom: -15%;
   font-size: 165px;
   color: rgba(200, 225, 255, 0.35);
-  text-shadow: 0 0 28px #fff;
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.75));
   pointer-events: none;
 }
 
@@ -916,6 +1093,10 @@ button:focus-visible {
 }
 
 .project-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   font-size: 20px;
   line-height: 1;
   transition: transform 0.25s ease;
@@ -1127,6 +1308,12 @@ button:focus-visible {
 }
 
 .dossier-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: end;
+  width: 24px;
+  height: 24px;
   font-family: var(--font-display);
   font-size: 18px;
   color: #fff;
@@ -1370,7 +1557,9 @@ button:focus-visible {
 }
 
 .screenshot-caption span {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-display);
   font-size: 9px;
   letter-spacing: 0.12em;
@@ -1476,11 +1665,24 @@ button:focus-visible {
   gap: 24px;
 }
 
+.footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .footer a:hover {
   color: #fff;
 }
 
 /* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .header-nav {
+    gap: 18px;
+    font-size: 9.5px;
+  }
+}
+
 @media (max-width: 900px) {
   .projects-grid,
   .projects-grid--two,
@@ -1495,19 +1697,17 @@ button:focus-visible {
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .header {
-    height: auto;
-    padding: 14px 5%;
-    flex-direction: column;
-    gap: 12px;
+    min-height: calc(60px + env(safe-area-inset-top, 0px));
   }
 
-  .header nav {
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: center;
-    font-size: 9px;
+  .header-nav {
+    display: none;
+  }
+
+  .header-mobile-actions {
+    display: flex;
   }
 
   .section {

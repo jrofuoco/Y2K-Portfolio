@@ -1,0 +1,21 @@
+---
+import { ICON_MARKUP, type Y2KIconName } from '../lib/icons';
+
+interface Props {
+  name: Y2KIconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const markup = ICON_MARKUP[name];
+---
+
+<svg
+  class:list={['y2k-icon', className]}
+  viewBox="0 0 16 16"
+  width="1em"
+  height="1em"
+  aria-hidden="true"
+  focusable="false"
+  set:html={markup}
+/>

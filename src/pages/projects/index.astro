@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import Y2KIcon from '../../components/Y2KIcon.astro';
 import { projects } from '../../data/portfolio';
 
 const categories = ['ALL', 'ANDROID & WEB', 'WEB', 'ANDROID & DESKTOP'];
@@ -49,7 +50,7 @@ const categories = ['ALL', 'ANDROID & WEB', 'WEB', 'ANDROID & DESKTOP'];
       <h2>Your project<br /><em>belongs here.</em></h2>
       <div style="margin-top: 28px;">
         <a href="/contact" class="y2k-btn y2k-btn--light" data-magnetic>
-          <span>BOOK A PROJECT <span>→</span></span>
+          <span>BOOK A PROJECT <Y2KIcon name="arrow-right" /></span>
         </a>
       </div>
     </div>

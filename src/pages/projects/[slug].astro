@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Y2KIcon from '../../components/Y2KIcon.astro';
 import { projects, type Project } from '../../data/portfolio';
 
 export function getStaticPaths() {
@@ -23,7 +24,7 @@ const { project, nextProject } = Astro.props;
 <BaseLayout title={`${project.title} — Case Study | Joshua Orlina`} description={project.summary}>
   <section class="page-hero">
     <div class="page-hero-hud">
-      <a href="/projects" style="color: #fff;">← BACK TO ARCHIVE</a>
+      <a href="/projects" class="page-hero-back" style="color: #fff;"><Y2KIcon name="arrow-left" /> BACK TO ARCHIVE</a>
       <span>CASE STUDY // {project.number} — {project.category}</span>
     </div>
     <h1>{project.title}<br /><em>{project.year}</em></h1>
@@ -49,7 +50,7 @@ const { project, nextProject } = Astro.props;
             class="y2k-btn y2k-btn--light"
             data-magnetic
           >
-            <span>LAUNCH LIVE WEB APP <span>↗</span></span>
+            <span>LAUNCH LIVE WEB APP <Y2KIcon name="arrow-tr" /></span>
           </a>
         </div>
       )
@@ -160,7 +161,7 @@ const { project, nextProject } = Astro.props;
                     <img src={shot.src} alt={shot.caption} loading="lazy" />
                   </div>
                   <div class="screenshot-caption">
-                    <span>{shot.tag} ↗</span>
+                    <span>{shot.tag} <Y2KIcon name="arrow-tr" /></span>
                     <p>{shot.caption}</p>
                   </div>
                 </a>
@@ -199,7 +200,7 @@ const { project, nextProject } = Astro.props;
                   <img src={shot.src} alt={shot.caption} loading="lazy" />
                 </div>
                 <div class="screenshot-caption">
-                  <span>{shot.tag} ↗</span>
+                  <span>{shot.tag} <Y2KIcon name="arrow-tr" /></span>
                   <p>{shot.caption}</p>
                 </div>
               </a>
@@ -238,7 +239,7 @@ const { project, nextProject } = Astro.props;
                   <img src={pov.src} alt={pov.caption} loading="lazy" />
                 </div>
                 <div class="screenshot-caption">
-                  <span>{pov.tag} ↗</span>
+                  <span>{pov.tag} <Y2KIcon name="arrow-tr" /></span>
                   <p>{pov.caption}</p>
                 </div>
               </a>
@@ -256,7 +257,7 @@ const { project, nextProject } = Astro.props;
       <h2>{nextProject.title}</h2>
       <p style="color: var(--ice); margin: 12px auto 28px;">{nextProject.tag}</p>
       <a href={`/projects/${nextProject.slug}`} class="y2k-btn y2k-btn--light" data-magnetic>
-        <span>VIEW NEXT PROJECT <span>→</span></span>
+        <span>VIEW NEXT PROJECT <Y2KIcon name="arrow-right" /></span>
       </a>
     </div>
   </section>

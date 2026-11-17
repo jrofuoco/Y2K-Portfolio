@@ -1,5 +1,6 @@
 ---
 import type { Project } from '../data/portfolio';
+import Y2KIcon from './Y2KIcon.astro';
 
 interface Props {
   project: Project;
@@ -20,7 +21,7 @@ const { project } = Astro.props;
         <span class="project-badge">{project.year}</span>
       </div>
       {project.artClass === 'art-hyperion' && (
-        <span class="project-art-glyph" aria-hidden="true">✳</span>
+        <span class="project-art-glyph" aria-hidden="true"><Y2KIcon name="starburst" /></span>
       )}
     </div>
     <div class="project-meta">
@@ -28,7 +29,7 @@ const { project } = Astro.props;
         <h3>{project.title}</h3>
         <p>{project.tag}</p>
       </div>
-      <span class="project-arrow" aria-hidden="true">↗</span>
+      <span class="project-arrow" aria-hidden="true"><Y2KIcon name="arrow-tr" /></span>
     </div>
   </a>
 </article>

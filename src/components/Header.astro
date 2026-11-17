@@ -1,15 +1,24 @@
 ---
+import Y2KIcon from './Y2KIcon.astro';
+
 const pathname = Astro.url.pathname;
 const isActive = (path: string) => {
   if (path === '/') return pathname === '/';
   return pathname.startsWith(path);
 };
+
+const navLinks = [
+  { href: '/', label: 'Home', num: '01' },
+  { href: '/projects', label: 'Work', num: '02' },
+  { href: '/services', label: 'Services', num: '03' },
+  { href: '/about', label: 'About', num: '04' },
+];
 ---
 
-<header class="header">
+<header class="header" id="site-header">
   <div class="header-left">
     <a class="logo" href="/" data-magnetic>
-      DUA<span class="logo-star">✦</span>
+      DUA<span class="logo-star" aria-hidden="true"><Y2KIcon name="sparkle" /></span>
     </a>
     <div class="header-status" aria-label="Portfolio status">
       <span class="status-dot"></span>
@@ -17,13 +26,155 @@ const isActive = (path: string) => {
     </div>
   </div>
 
-  <nav aria-label="Main navigation">
-    <a href="/" class:list={['nav-link', { active: isActive('/') }]}>Home</a>
-    <a href="/projects" class:list={['nav-link', { active: isActive('/projects') }]}>Work</a>
-    <a href="/services" class:list={['nav-link', { active: isActive('/services') }]}>Services</a>
-    <a href="/about" class:list={['nav-link', { active: isActive('/about') }]}>About</a>
+  <nav class="header-nav" aria-label="Main navigation">
+    {navLinks.map((link) => (
+      <a href={link.href} class:list={['nav-link', { active: isActive(link.href) }]}>
+        {link.label}
+      </a>
+    ))}
     <a href="/contact" class:list={['nav-cta', { active: isActive('/contact') }]} data-magnetic>
-      Contact ↗
+      Contact <Y2KIcon name="arrow-tr" />
     </a>
   </nav>
+
+  <div class="header-mobile-actions">
+    <a
+      href="/contact"
+      class:list={['nav-cta nav-cta--compact', { active: isActive('/contact') }]}
+    >
+      Contact <Y2KIcon name="arrow-tr" />
+    </a>
+    <button
+      type="button"
+      class="nav-toggle"
+      id="nav-toggle"
+      aria-expanded="false"
+      aria-controls="mobile-nav-panel"
+      aria-label="Open navigation menu"
+    >
+      <span class="nav-toggle-icon nav-toggle-icon--menu" aria-hidden="true">
+        <Y2KIcon name="menu" />
+      </span>
+      <span class="nav-toggle-icon nav-toggle-icon--close" aria-hidden="true">
+        <Y2KIcon name="close" />
+      </span>
+      <span class="nav-toggle-label">Menu</span>
+    </button>
+  </div>
+
+  <div class="mobile-nav-panel" id="mobile-nav-panel" hidden>
+    <div class="mobile-nav-hud">
+      <span class="status-dot"></span>
+      <span>PORTFOLIO / 2026 // V2.6 ONLINE</span>
+    </div>
+    <nav class="mobile-nav-list" aria-label="Mobile navigation">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={['mobile-nav-link', { active: isActive(link.href) }]}
+        >
+          <span class="mobile-nav-num">{link.num} //</span>
+          <span class="mobile-nav-text">{link.label}</span>
+          <span class="mobile-nav-indicator" aria-hidden="true">
+            {isActive(link.href) ? 'ACTIVE' : ''}
+          </span>
+        </a>
+      ))}
+    </nav>
+  </div>
 </header>
+
+<script>
+  import gsap from 'gsap';
+
+  let navAbortController: AbortController | null = null;
+
+  function initMobileNav() {
+    navAbortController?.abort();
+    navAbortController = new AbortController();
+    const { signal } = navAbortController;
+
+    const header = document.getElementById('site-header');
+    const toggle = document.getElementById('nav-toggle') as HTMLButtonElement | null;
+    const panel = document.getElementById('mobile-nav-panel') as HTMLElement | null;
+    if (!header || !toggle || !panel) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const desktopMq = window.matchMedia('(min-width: 769px)');
+
+    const closeMenu = () => {
+      if (panel.hidden) return;
+      gsap.killTweensOf(panel);
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation menu');
+      header.classList.remove('is-menu-open');
+    };
+
+    const openMenu = () => {
+      gsap.killTweensOf(panel);
+      panel.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close navigation menu');
+      header.classList.add('is-menu-open');
+
+      if (!prefersReducedMotion) {
+        gsap.fromTo(
+          panel,
+          { opacity: 0, y: -8 },
+          { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out', clearProps: 'transform,opacity' }
+        );
+      }
+    };
+
+    toggle.addEventListener(
+      'click',
+      () => {
+        if (panel.hidden) {
+          openMenu();
+        } else {
+          closeMenu();
+        }
+      },
+      { signal }
+    );
+
+    panel.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu, { signal });
+    });
+
+    document.addEventListener(
+      'click',
+      (e) => {
+        if (!panel.hidden && e.target instanceof Node && !header.contains(e.target)) {
+          closeMenu();
+        }
+      },
+      { signal }
+    );
+
+    document.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Escape' && !panel.hidden) {
+          closeMenu();
+          toggle.focus();
+        }
+      },
+      { signal }
+    );
+
+    desktopMq.addEventListener(
+      'change',
+      (e) => {
+        if (e.matches) closeMenu();
+      },
+      { signal }
+    );
+  }
+
+  document.addEventListener('astro:page-load', initMobileNav);
+  document.addEventListener('astro:before-swap', () => {
+    navAbortController?.abort();
+  });
+</script>

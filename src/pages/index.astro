@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import Y2KIcon from '../components/Y2KIcon.astro';
 import { aboutInfo, contactInfo, projects, services, servicesInfo } from '../data/portfolio';
 
 const featuredProjects = projects.slice(0, 3);
@@ -19,9 +20,9 @@ const featuredProjects = projects.slice(0, 3);
     />
 
     <!-- Animated Y2K Sparkle Flares -->
-    <span class="hero-sparkle sparkle-1" aria-hidden="true">✦</span>
-    <span class="hero-sparkle sparkle-2" aria-hidden="true">✦</span>
-    <span class="hero-sparkle sparkle-3" aria-hidden="true">✧</span>
+    <span class="hero-sparkle sparkle-1" aria-hidden="true"><Y2KIcon name="sparkle" /></span>
+    <span class="hero-sparkle sparkle-2" aria-hidden="true"><Y2KIcon name="sparkle" /></span>
+    <span class="hero-sparkle sparkle-3" aria-hidden="true"><Y2KIcon name="sparkle-outline" /></span>
 
     <!-- Hero Bottom Bar Header: Core Platforms (Android, Desktop, Web) -->
     <div class="hero-domains-header" aria-hidden="true">
@@ -42,14 +43,14 @@ const featuredProjects = projects.slice(0, 3);
           <img src="/assets/projects/owe/mobile-register.png" alt="" loading="eager" />
         </div>
         <span class="hero-domain-tag">01 / ANDROID</span>
-        <span class="hero-hotspot-badge">EXPLORE ANDROID ↗</span>
+        <span class="hero-hotspot-badge">EXPLORE ANDROID <Y2KIcon name="arrow-tr" /></span>
       </div>
       <div class="hero-domain-caption">
         <div>
           <h3>ANDROID APPS</h3>
           <p>KOTLIN &amp; JAVA / MOBILE &amp; VISION</p>
         </div>
-        <span class="hero-domain-arrow" aria-hidden="true">↗</span>
+        <span class="hero-domain-arrow" aria-hidden="true"><Y2KIcon name="arrow-tr" /></span>
       </div>
     </a>
 
@@ -67,14 +68,14 @@ const featuredProjects = projects.slice(0, 3);
           loading="eager"
         />
         <span class="hero-domain-tag">02 / DESKTOP</span>
-        <span class="hero-hotspot-badge">EXPLORE DESKTOP ↗</span>
+        <span class="hero-hotspot-badge">EXPLORE DESKTOP <Y2KIcon name="arrow-tr" /></span>
       </div>
       <div class="hero-domain-caption">
         <div>
           <h3>DESKTOP SYSTEMS</h3>
           <p>FLUTTER WINDOWS / JAVAFX ADMIN</p>
         </div>
-        <span class="hero-domain-arrow" aria-hidden="true">↗</span>
+        <span class="hero-domain-arrow" aria-hidden="true"><Y2KIcon name="arrow-tr" /></span>
       </div>
     </a>
 
@@ -92,14 +93,14 @@ const featuredProjects = projects.slice(0, 3);
           loading="eager"
         />
         <span class="hero-domain-tag">03 / WEB</span>
-        <span class="hero-hotspot-badge">EXPLORE WEB ↗</span>
+        <span class="hero-hotspot-badge">EXPLORE WEB <Y2KIcon name="arrow-tr" /></span>
       </div>
       <div class="hero-domain-caption">
         <div>
           <h3>WEB PLATFORMS</h3>
           <p>LARAVEL / SUPABASE / FULL-STACK</p>
         </div>
-        <span class="hero-domain-arrow" aria-hidden="true">↗</span>
+        <span class="hero-domain-arrow" aria-hidden="true"><Y2KIcon name="arrow-tr" /></span>
       </div>
     </a>
   </section>
@@ -107,18 +108,18 @@ const featuredProjects = projects.slice(0, 3);
   <!-- Y2K Infinite Ticker Band -->
   <div class="ticker-wrap" aria-hidden="true">
     <div class="ticker-track" data-ticker>
-      <span class="ticker-item">✦ <span>JOSHUA ORLINA // @JROFUOCO</span></span>
+      <span class="ticker-item"><Y2KIcon name="sparkle" /> <span>JOSHUA ORLINA // @JROFUOCO</span></span>
       <span class="ticker-item">+ <span>JUNIOR ANDROID ENGINEER & WEB DEVELOPER</span></span>
       <span class="ticker-item">+ <span>CALABARZON, PHILIPPINES</span></span>
       <span class="ticker-item">+ <span>JIMAC INCORPORATED // ANDROID DEV</span></span>
       <span class="ticker-item">+ <span>MEGAWORLD CORPORATION // INTERN ALUM</span></span>
-      <span class="ticker-item">✦ <span>OPEN TO ANDROID & WEB OPPORTUNITIES</span></span>
-      <span class="ticker-item">✦ <span>JOSHUA ORLINA // @JROFUOCO</span></span>
+      <span class="ticker-item"><Y2KIcon name="sparkle" /> <span>OPEN TO ANDROID & WEB OPPORTUNITIES</span></span>
+      <span class="ticker-item"><Y2KIcon name="sparkle" /> <span>JOSHUA ORLINA // @JROFUOCO</span></span>
       <span class="ticker-item">+ <span>JUNIOR ANDROID ENGINEER & WEB DEVELOPER</span></span>
       <span class="ticker-item">+ <span>CALABARZON, PHILIPPINES</span></span>
       <span class="ticker-item">+ <span>JIMAC INCORPORATED // ANDROID DEV</span></span>
       <span class="ticker-item">+ <span>MEGAWORLD CORPORATION // INTERN ALUM</span></span>
-      <span class="ticker-item">✦ <span>OPEN TO ANDROID & WEB OPPORTUNITIES</span></span>
+      <span class="ticker-item"><Y2KIcon name="sparkle" /> <span>OPEN TO ANDROID & WEB OPPORTUNITIES</span></span>
     </div>
   </div>
 
@@ -134,7 +135,7 @@ const featuredProjects = projects.slice(0, 3);
           Practical problems turned into clear, reliable Android and web products.
         </p>
         <a href="/projects" class="y2k-btn" data-magnetic>
-          <span>VIEW ALL PROJECTS <span>→</span></span>
+          <span>VIEW ALL PROJECTS <Y2KIcon name="arrow-right" /></span>
         </a>
       </div>
     </div>
@@ -184,7 +185,7 @@ const featuredProjects = projects.slice(0, 3);
         </div>
 
         <a href="/about" class="y2k-btn y2k-btn--light" data-magnetic>
-          <span>FULL ABOUT PROFILE <span>→</span></span>
+          <span>FULL ABOUT PROFILE <Y2KIcon name="arrow-right" /></span>
         </a>
       </div>
     </div>
@@ -202,7 +203,7 @@ const featuredProjects = projects.slice(0, 3);
           {servicesInfo.intro}
         </p>
         <a href="/services" class="y2k-btn" data-magnetic>
-          <span>EXPLORE SERVICES <span>→</span></span>
+          <span>EXPLORE SERVICES <Y2KIcon name="arrow-right" /></span>
         </a>
       </div>
     </div>
@@ -253,7 +254,7 @@ const featuredProjects = projects.slice(0, 3);
           {contactInfo.intro}
         </p>
         <a href="/contact" class="y2k-btn" data-magnetic>
-          <span>OPEN CONTACT PAGE <span>↗</span></span>
+          <span>OPEN CONTACT PAGE <Y2KIcon name="arrow-tr" /></span>
         </a>
       </div>
     </div>
@@ -272,7 +273,7 @@ const featuredProjects = projects.slice(0, 3);
                 <span class="dossier-num">{item.number}</span>
                 <h3 class="dossier-title">{item.title}</h3>
                 <p class="dossier-sub">{item.subtitle}</p>
-                <span class="dossier-symbol" aria-hidden="true">↗</span>
+                <span class="dossier-symbol" aria-hidden="true"><Y2KIcon name="arrow-tr" /></span>
               </div>
             </a>
           ) : (

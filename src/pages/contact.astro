@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Y2KIcon from '../components/Y2KIcon.astro';
 import { contactInfo } from '../data/portfolio';
 
 const web3FormsKey =
@@ -47,7 +48,7 @@ const web3FormsKey =
                     <span class="dossier-num">{item.number}</span>
                     <h3 class="dossier-title">{item.title}</h3>
                     <p class="dossier-sub">{item.subtitle}</p>
-                    <span class="dossier-symbol" aria-hidden="true">↗</span>
+                    <span class="dossier-symbol" aria-hidden="true"><Y2KIcon name="arrow-tr" /></span>
                   </div>
                 </a>
               ) : (
@@ -134,7 +135,7 @@ const web3FormsKey =
 
         <div>
           <button type="submit" class="y2k-btn y2k-btn--light" id="submit-btn" data-magnetic>
-            <span id="submit-btn-text">SEND EMAIL <span>↗</span></span>
+            <span id="submit-btn-text">SEND EMAIL <Y2KIcon name="arrow-tr" /></span>
           </button>
         </div>
       </form>
@@ -143,6 +144,7 @@ const web3FormsKey =
 
   <script>
     import gsap from 'gsap';
+    import { renderIconSvg } from '../lib/icons';
 
     function initContactPage() {
       const rows = document.querySelectorAll('#contact-dossier .dossier-item');
@@ -160,6 +162,11 @@ const web3FormsKey =
       const statusBox = document.getElementById('form-status');
       if (!form || !btnText || !statusBox || !submitBtn) return;
 
+      const setStatus = (iconHtml: string, text: string) => {
+        statusBox.innerHTML = iconHtml;
+        statusBox.appendChild(document.createTextNode(` ${text}`));
+      };
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -171,8 +178,10 @@ const web3FormsKey =
         const accessKey = (form.getAttribute('data-access-key') || '').trim();
 
         submitBtn.disabled = true;
-        btnText.innerHTML = 'SENDING TRANSMISSION... <span>✦</span>';
-        statusBox.style.display = 'block';
+        btnText.innerHTML = `SENDING TRANSMISSION... ${renderIconSvg('sparkle')}`;
+        statusBox.style.display = 'flex';
+        statusBox.style.alignItems = 'center';
+        statusBox.style.gap = '8px';
         statusBox.style.borderColor = 'rgba(169, 196, 255, 0.65)';
         statusBox.style.color = '#d9e8ff';
         statusBox.textContent = '● CONNECTING TO TRANSMISSION RELAY...';
@@ -223,20 +232,25 @@ const web3FormsKey =
           const result = await response.json();
 
           if (response.ok && (result.success === true || result.success === 'true')) {
-            btnText.innerHTML = 'MESSAGE SENT <span>✓</span>';
+            btnText.innerHTML = `MESSAGE SENT ${renderIconSvg('check')}`;
             statusBox.style.borderColor = '#77ffb6';
             statusBox.style.color = '#77ffb6';
-            statusBox.textContent =
-              '✓ TRANSMISSION DELIVERED DIRECTLY TO JOSHUAORLINA08@GMAIL.COM.';
+            setStatus(
+              renderIconSvg('check'),
+              'TRANSMISSION DELIVERED DIRECTLY TO JOSHUAORLINA08@GMAIL.COM.'
+            );
             form.reset();
           } else {
             throw new Error(result.message || 'Submission failed');
           }
         } catch (err: any) {
-          btnText.innerHTML = 'RETRY SEND <span>↗</span>';
+          btnText.innerHTML = `RETRY SEND ${renderIconSvg('arrow-tr')}`;
           statusBox.style.borderColor = '#ff7b9c';
           statusBox.style.color = '#ffb8c9';
-          statusBox.textContent = `⚠ TRANSMISSION ERROR: ${err?.message || 'Unable to send right now. Please email joshuaorlina08@gmail.com directly.'}`;
+          setStatus(
+            renderIconSvg('alert'),
+            `TRANSMISSION ERROR: ${err?.message || 'Unable to send right now. Please email joshuaorlina08@gmail.com directly.'}`
+          );
         } finally {
           submitBtn.disabled = false;
         }
