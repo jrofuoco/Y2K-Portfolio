@@ -193,10 +193,10 @@ function safeParseJson(raw: string): Record<string, unknown> {
 export const POST: APIRoute = async ({ request }) => {
   const apiKey = (import.meta.env.GROQ_API_KEY || process.env.GROQ_API_KEY || '').trim();
   if (!apiKey) {
+    console.error('[api/chat] Missing GROQ_API_KEY environment variable.');
     return jsonResponse(
       {
-        error:
-          'GROQ_API_KEY is not configured on the server. Add GROQ_API_KEY to your .env or Vercel environment variables.',
+        error: 'Assistant service is temporarily unavailable. Please use the /contact page.',
       },
       500
     );
@@ -239,15 +239,11 @@ export const POST: APIRoute = async ({ request }) => {
   ];
 
   let emailDraft: EmailDraft | null = null;
-  let modelUsed: string = GROQ_MODELS[0];
-  let fallbackUsed = false;
 
   try {
     for (let step = 0; step < 3; step++) {
       const enableTools = step < 2;
       const result = await callGroqWithFallback(apiKey, conversation, enableTools);
-      modelUsed = result.modelUsed;
-      fallbackUsed = fallbackUsed || result.fallbackUsed;
 
       const assistantMsg = result.message;
       const toolCalls = assistantMsg.tool_calls;
@@ -256,8 +252,6 @@ export const POST: APIRoute = async ({ request }) => {
         return jsonResponse({
           reply: assistantMsg.content?.trim() || 'Transmission complete.',
           emailDraft,
-          modelUsed,
-          fallbackUsed,
         });
       }
 
@@ -325,8 +319,6 @@ export const POST: APIRoute = async ({ request }) => {
             inlineReply ||
             `Transmission draft ready for **${emailDraft.name}** (${emailDraft.email}). Review the details below and click **SEND EMAIL** to deliver it directly to Joshua.`,
           emailDraft,
-          modelUsed,
-          fallbackUsed,
         });
       }
     }
@@ -335,17 +327,16 @@ export const POST: APIRoute = async ({ request }) => {
       reply:
         'I gathered the details, but reached the step limit. Please ask a follow-up question or visit /contact.',
       emailDraft,
-      modelUsed,
-      fallbackUsed,
     });
   } catch (err: any) {
     const status = typeof err?.status === 'number' && err.status >= 400 ? err.status : 502;
     const isRateLimit = status === 429;
+    console.error('[api/chat] Upstream error:', status, err?.message || err);
     return jsonResponse(
       {
         error: isRateLimit
-          ? 'Both OSS-20B and OSS-120B hit Groq rate limits right now. Please wait a moment and try again, or use the /contact page.'
-          : err?.message || 'Assistant relay error.',
+          ? 'DUA is handling high traffic right now. Please wait a moment and try again, or use the /contact page.'
+          : 'Assistant relay is temporarily unavailable. Please try again or use the /contact page.',
       },
       isRateLimit ? 429 : 502
     );

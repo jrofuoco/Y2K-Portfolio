@@ -1890,18 +1890,6 @@ button:focus-visible {
   color: #fff;
 }
 
-.y2k-ai-node {
-  font-family: var(--font-display);
-  font-size: 8.5px;
-  letter-spacing: 0.1em;
-  color: var(--ice);
-  opacity: 0.85;
-}
-
-.y2k-ai-node.is-fallback {
-  color: #ffe38f;
-}
-
 .y2k-ai-actions {
   display: flex;
   align-items: center;
@@ -2223,6 +2211,10 @@ button:focus-visible {
   letter-spacing: 0.06em;
   line-height: 1.4;
   color: var(--ice-bright);
+}
+
+.y2k-ai-draft-status[hidden] {
+  display: none;
 }
 
 .y2k-ai-draft-status.is-success {

@@ -36,7 +36,6 @@ const web3FormsKey =
     <header class="y2k-ai-header">
       <div class="y2k-ai-title-wrap">
         <span class="y2k-ai-badge"><Y2KIcon name="sparkle" /> DUA // AI</span>
-        <span class="y2k-ai-node" id="y2k-ai-node">NODE: OSS-20B</span>
       </div>
       <div class="y2k-ai-actions">
         <button
@@ -311,9 +310,8 @@ const web3FormsKey =
     const form = document.getElementById('y2k-ai-form') as HTMLFormElement | null;
     const input = document.getElementById('y2k-ai-input') as HTMLTextAreaElement | null;
     const sendBtn = document.getElementById('y2k-ai-send') as HTMLButtonElement | null;
-    const nodeLabel = document.getElementById('y2k-ai-node') as HTMLElement | null;
 
-    if (!trigger || !panel || !closeBtn || !resetBtn || !messagesEl || !promptsEl || !form || !input || !sendBtn || !nodeLabel) {
+    if (!trigger || !panel || !closeBtn || !resetBtn || !messagesEl || !promptsEl || !form || !input || !sendBtn) {
       return;
     }
 
@@ -437,8 +435,6 @@ const web3FormsKey =
       history = [];
       messagesEl.innerHTML = '';
       promptsEl.hidden = false;
-      nodeLabel.textContent = 'NODE: OSS-20B';
-      nodeLabel.classList.remove('is-fallback');
       appendMessageBubble('assistant', WELCOME_MESSAGE);
     };
 
@@ -483,16 +479,6 @@ const web3FormsKey =
 
         if (!res.ok) {
           throw new Error(data?.error || `Request failed (${res.status})`);
-        }
-
-        if (typeof data?.modelUsed === 'string') {
-          const is120b = data.modelUsed.includes('120b');
-          nodeLabel.textContent = data.fallbackUsed
-            ? 'NODE: OSS-120B (FALLBACK)'
-            : is120b
-              ? 'NODE: OSS-120B'
-              : 'NODE: OSS-20B';
-          nodeLabel.classList.toggle('is-fallback', Boolean(data.fallbackUsed));
         }
 
         const replyText = typeof data?.reply === 'string' && data.reply.trim()
