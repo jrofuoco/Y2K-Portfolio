@@ -2139,20 +2139,19 @@ button:focus-visible {
 .y2k-ai-link {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 5px;
   color: #ffffff;
   font-weight: 500;
-  padding: 0 5px;
+  padding: 0 6px;
   border: 1px solid rgba(158, 197, 255, 0.45);
   background: rgba(27, 110, 243, 0.28);
   text-decoration: none;
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.y2k-ai-link::after {
-  content: '↗';
-  font-size: 10px;
-  opacity: 0.85;
+.y2k-ai-link .y2k-icon {
+  font-size: 11px;
+  opacity: 0.9;
 }
 
 .y2k-ai-link:hover {

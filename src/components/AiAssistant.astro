@@ -137,6 +137,8 @@ const web3FormsKey =
       return `@@CODE_${idx}@@`;
     });
 
+    const arrowSvg = renderIconSvg('arrow-tr');
+
     // Markdown links: [label](url)
     safe = safe.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, url) => {
       const isInternal = url.startsWith('/');
@@ -144,13 +146,13 @@ const web3FormsKey =
         url.startsWith('https://') || url.startsWith('http://') || url.startsWith('mailto:');
       if (!isInternal && !isSafeHttp) return label;
       const attrs = isInternal ? '' : ' target="_blank" rel="noreferrer"';
-      return `<a href="${url}" class="y2k-ai-link"${attrs}>${label}</a>`;
+      return `<a href="${url}" class="y2k-ai-link"${attrs}>${label}${arrowSvg}</a>`;
     });
 
     // Bare internal routes like /projects/audit-portal or /contact
     safe = safe.replace(
       /(^|[\s(])(\/(?:projects\/[a-z0-9-]+|projects|about|services|contact))\b/g,
-      '$1<a href="$2" class="y2k-ai-link">$2</a>'
+      `$1<a href="$2" class="y2k-ai-link">$2${arrowSvg}</a>`
     );
 
     // Bold **text** and italic *text*
