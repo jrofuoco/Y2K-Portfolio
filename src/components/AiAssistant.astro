@@ -1,0 +1,569 @@
+---
+import Y2KIcon from './Y2KIcon.astro';
+import { DEFAULT_WEB3FORMS_ACCESS_KEY } from '../lib/send-contact-email';
+
+const web3FormsKey =
+  import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY || DEFAULT_WEB3FORMS_ACCESS_KEY;
+---
+
+<div
+  class="y2k-ai-root"
+  id="y2k-ai-root"
+  data-access-key={web3FormsKey}
+  transition:persist="y2k-ai-assistant"
+>
+  <button
+    type="button"
+    class="y2k-btn y2k-btn--light y2k-ai-trigger"
+    id="y2k-ai-trigger"
+    aria-expanded="false"
+    aria-controls="y2k-ai-panel"
+    aria-label="Open DUA AI Assistant"
+  >
+    <span>
+      <Y2KIcon name="sparkle" />
+      <span>ASK AI // DUA</span>
+    </span>
+  </button>
+
+  <section
+    class="hud-frame y2k-ai-panel"
+    id="y2k-ai-panel"
+    role="dialog"
+    aria-label="DUA Portfolio AI Assistant"
+    hidden
+  >
+    <header class="y2k-ai-header">
+      <div class="y2k-ai-title-wrap">
+        <span class="y2k-ai-badge"><Y2KIcon name="sparkle" /> DUA // AI</span>
+        <span class="y2k-ai-node" id="y2k-ai-node">NODE: OSS-20B</span>
+      </div>
+      <div class="y2k-ai-actions">
+        <button
+          type="button"
+          class="y2k-ai-icon-btn"
+          id="y2k-ai-reset"
+          title="Reset conversation"
+          aria-label="Reset conversation"
+        >
+          CLR
+        </button>
+        <button
+          type="button"
+          class="y2k-ai-icon-btn"
+          id="y2k-ai-close"
+          title="Close assistant"
+          aria-label="Close assistant"
+        >
+          <Y2KIcon name="close" />
+        </button>
+      </div>
+    </header>
+
+    <div class="y2k-ai-messages" id="y2k-ai-messages" aria-live="polite"></div>
+
+    <div class="y2k-ai-prompts" id="y2k-ai-prompts">
+      <button type="button" class="y2k-ai-chip" data-prompt="Who is Joshua Orlina?">
+        Who is Joshua?
+      </button>
+      <button type="button" class="y2k-ai-chip" data-prompt="Tell me about Joshua's projects and tech stack.">
+        Projects & stack
+      </button>
+      <button type="button" class="y2k-ai-chip" data-prompt="I want to send an email to Joshua.">
+        Send email
+      </button>
+    </div>
+
+    <form class="y2k-ai-form" id="y2k-ai-form">
+      <label class="sr-only" for="y2k-ai-input">Ask DUA a question</label>
+      <textarea
+        id="y2k-ai-input"
+        class="form-input y2k-ai-input"
+        rows="1"
+        placeholder="Ask about Joshua, projects, or email..."
+        maxlength="1200"
+        required
+      ></textarea>
+      <button type="submit" class="y2k-btn y2k-btn--light y2k-ai-send" id="y2k-ai-send" aria-label="Send message">
+        <span><Y2KIcon name="arrow-tr" /></span>
+      </button>
+    </form>
+  </section>
+</div>
+
+<script>
+  import { renderIconSvg } from '../lib/icons';
+  import { sendContactEmail } from '../lib/send-contact-email';
+
+  interface ChatMessage {
+    role: 'user' | 'assistant';
+    content: string;
+  }
+
+  interface EmailDraft {
+    name: string;
+    email: string;
+    service:
+      | 'Android Application'
+      | 'Website / Web App'
+      | 'Junior Engineer Role'
+      | 'General Inquiry';
+    message: string;
+  }
+
+  const WELCOME_MESSAGE = [
+    '### SYSTEM ONLINE // DUA',
+    "I'm **DUA**, Joshua Orlina's portfolio assistant. Here is what I can help you with:",
+    '- **Profile:** Background, skills, and work experience',
+    '- **Projects:** Case studies, tech stacks, and live links',
+    '- **Direct Email:** Draft & send a message straight to Joshua',
+  ].join('\n');
+
+  function escapeHtml(text: string): string {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function formatInlineMarkdown(raw: string): string {
+    let safe = escapeHtml(raw);
+    // Protect inline code spans first so inner symbols aren't double-formatted
+    const codeTokens: string[] = [];
+    safe = safe.replace(/`([^`]+)`/g, (_, code) => {
+      const idx = codeTokens.length;
+      codeTokens.push(`<code>${code}</code>`);
+      return `@@CODE_${idx}@@`;
+    });
+
+    // Markdown links: [label](url)
+    safe = safe.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, url) => {
+      const isInternal = url.startsWith('/');
+      const isSafeHttp =
+        url.startsWith('https://') || url.startsWith('http://') || url.startsWith('mailto:');
+      if (!isInternal && !isSafeHttp) return label;
+      const attrs = isInternal ? '' : ' target="_blank" rel="noreferrer"';
+      return `<a href="${url}" class="y2k-ai-link"${attrs}>${label}</a>`;
+    });
+
+    // Bare internal routes like /projects/audit-portal or /contact
+    safe = safe.replace(
+      /(^|[\s(])(\/(?:projects\/[a-z0-9-]+|projects|about|services|contact))\b/g,
+      '$1<a href="$2" class="y2k-ai-link">$2</a>'
+    );
+
+    // Bold **text** and italic *text*
+    safe = safe.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    safe = safe.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+
+    // Restore code tokens
+    safe = safe.replace(/@@CODE_(\d+)@@/g, (_, idx) => codeTokens[Number(idx)] || '');
+    return safe;
+  }
+
+  function splitTableCells(row: string): string[] {
+    return row
+      .trim()
+      .replace(/^\|/, '')
+      .replace(/\|$/, '')
+      .split('|')
+      .map((cell) => cell.trim());
+  }
+
+  function isTableDivider(line: string): boolean {
+    return /^\|?(\s*:?-{3,}:?\s*\|)+\s*:?-{3,}:?\s*\|?$/.test(line.trim());
+  }
+
+  function formatMessageHtml(raw: string): string {
+    const lines = raw.split(/\r?\n/);
+    const chunks: string[] = [];
+    let listType: 'ul' | 'ol' | null = null;
+    let inCodeBlock = false;
+    let codeLines: string[] = [];
+
+    const closeList = () => {
+      if (listType) {
+        chunks.push(`</${listType}>`);
+        listType = null;
+      }
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const trimmed = line.trim();
+
+      if (trimmed.startsWith('```')) {
+        closeList();
+        if (!inCodeBlock) {
+          inCodeBlock = true;
+          codeLines = [];
+        } else {
+          chunks.push(`<pre class="y2k-ai-pre"><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
+          inCodeBlock = false;
+          codeLines = [];
+        }
+        continue;
+      }
+
+      if (inCodeBlock) {
+        codeLines.push(line);
+        continue;
+      }
+
+      if (!trimmed) {
+        closeList();
+        continue;
+      }
+
+      // Horizontal rule
+      if (/^(?:-{3,}|\*{3,})$/.test(trimmed)) {
+        closeList();
+        chunks.push('<hr class="y2k-ai-hr" />');
+        continue;
+      }
+
+      // Headings (#, ##, ###, ####)
+      const headingMatch = trimmed.match(/^#{1,4}\s+(.+)$/);
+      if (headingMatch) {
+        closeList();
+        chunks.push(`<h4 class="y2k-ai-h">${formatInlineMarkdown(headingMatch[1])}</h4>`);
+        continue;
+      }
+
+      // Markdown tables
+      if (trimmed.includes('|') && i + 1 < lines.length && isTableDivider(lines[i + 1])) {
+        closeList();
+        const headers = splitTableCells(trimmed);
+        i += 2; // Skip header & divider
+        const rows: string[][] = [];
+        while (i < lines.length && lines[i].trim().includes('|')) {
+          rows.push(splitTableCells(lines[i]));
+          i++;
+        }
+        i--; // Rewind for outer loop increment
+        const thead = `<thead><tr>${headers.map((h) => `<th>${formatInlineMarkdown(h)}</th>`).join('')}</tr></thead>`;
+        const tbody = rows.length
+          ? `<tbody>${rows
+              .map(
+                (r) =>
+                  `<tr>${headers.map((_, idx) => `<td>${formatInlineMarkdown(r[idx] || '')}</td>`).join('')}</tr>`
+              )
+              .join('')}</tbody>`
+          : '';
+        chunks.push(`<div class="y2k-ai-table-wrap"><table class="y2k-ai-table">${thead}${tbody}</table></div>`);
+        continue;
+      }
+
+      // Blockquote
+      if (trimmed.startsWith('> ')) {
+        closeList();
+        chunks.push(`<blockquote class="y2k-ai-quote">${formatInlineMarkdown(trimmed.slice(2))}</blockquote>`);
+        continue;
+      }
+
+      // Unordered list
+      if (/^[-*•]\s+/.test(trimmed)) {
+        if (listType !== 'ul') {
+          closeList();
+          chunks.push('<ul class="y2k-ai-list">');
+          listType = 'ul';
+        }
+        chunks.push(`<li>${formatInlineMarkdown(trimmed.replace(/^[-*•]\s+/, ''))}</li>`);
+        continue;
+      }
+
+      // Ordered list
+      const orderedMatch = trimmed.match(/^(\d+)\.\s+(.+)$/);
+      if (orderedMatch) {
+        if (listType !== 'ol') {
+          closeList();
+          chunks.push('<ol class="y2k-ai-olist">');
+          listType = 'ol';
+        }
+        chunks.push(`<li>${formatInlineMarkdown(orderedMatch[2])}</li>`);
+        continue;
+      }
+
+      closeList();
+      chunks.push(`<p>${formatInlineMarkdown(trimmed)}</p>`);
+    }
+
+    if (inCodeBlock && codeLines.length) {
+      chunks.push(`<pre class="y2k-ai-pre"><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
+    }
+    closeList();
+    return chunks.join('') || `<p>${escapeHtml(raw)}</p>`;
+  }
+
+  function initAiAssistant() {
+    const root = document.getElementById('y2k-ai-root');
+    if (!root || root.dataset.initialized === 'true') return;
+    root.dataset.initialized = 'true';
+
+    const trigger = document.getElementById('y2k-ai-trigger') as HTMLButtonElement | null;
+    const panel = document.getElementById('y2k-ai-panel') as HTMLElement | null;
+    const closeBtn = document.getElementById('y2k-ai-close') as HTMLButtonElement | null;
+    const resetBtn = document.getElementById('y2k-ai-reset') as HTMLButtonElement | null;
+    const messagesEl = document.getElementById('y2k-ai-messages') as HTMLElement | null;
+    const promptsEl = document.getElementById('y2k-ai-prompts') as HTMLElement | null;
+    const form = document.getElementById('y2k-ai-form') as HTMLFormElement | null;
+    const input = document.getElementById('y2k-ai-input') as HTMLTextAreaElement | null;
+    const sendBtn = document.getElementById('y2k-ai-send') as HTMLButtonElement | null;
+    const nodeLabel = document.getElementById('y2k-ai-node') as HTMLElement | null;
+
+    if (!trigger || !panel || !closeBtn || !resetBtn || !messagesEl || !promptsEl || !form || !input || !sendBtn || !nodeLabel) {
+      return;
+    }
+
+    const accessKey = (root.getAttribute('data-access-key') || '').trim();
+    let history: ChatMessage[] = [];
+    let isBusy = false;
+
+    const scrollToBottom = () => {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    };
+
+    const appendMessageBubble = (role: 'user' | 'assistant', content: string, isError = false) => {
+      const item = document.createElement('div');
+      item.className = `y2k-ai-msg y2k-ai-msg--${role}${isError ? ' is-error' : ''}`;
+
+      const tag = document.createElement('div');
+      tag.className = 'y2k-ai-msg-tag';
+      tag.textContent = role === 'user' ? 'VISITOR' : 'DUA';
+
+      const body = document.createElement('div');
+      body.className = 'y2k-ai-msg-body';
+      body.innerHTML = role === 'user' ? `<p>${escapeHtml(content)}</p>` : formatMessageHtml(content);
+
+      item.appendChild(tag);
+      item.appendChild(body);
+      messagesEl.appendChild(item);
+      scrollToBottom();
+      return item;
+    };
+
+    const appendEmailDraftCard = (draft: EmailDraft) => {
+      const card = document.createElement('form');
+      card.className = 'y2k-ai-draft';
+      card.innerHTML = `
+        <div class="y2k-ai-draft-head">
+          <span>TRANSMISSION DRAFT</span>
+          <span>TO: JOSHUAORLINA08@GMAIL.COM</span>
+        </div>
+        <label class="y2k-ai-draft-field">
+          <span>NAME</span>
+          <input type="text" name="name" class="form-input" required />
+        </label>
+        <label class="y2k-ai-draft-field">
+          <span>EMAIL</span>
+          <input type="email" name="email" class="form-input" required />
+        </label>
+        <label class="y2k-ai-draft-field">
+          <span>OPPORTUNITY</span>
+          <select name="service" class="form-select">
+            <option value="Android Application">Android Application</option>
+            <option value="Website / Web App">Website / Web App</option>
+            <option value="Junior Engineer Role">Junior Engineer Role</option>
+            <option value="General Inquiry">General Inquiry</option>
+          </select>
+        </label>
+        <label class="y2k-ai-draft-field">
+          <span>MESSAGE</span>
+          <textarea name="message" rows="3" class="form-textarea" required></textarea>
+        </label>
+        <div class="y2k-ai-draft-status" hidden></div>
+        <button type="submit" class="y2k-btn y2k-btn--light y2k-ai-draft-btn">
+          <span>SEND EMAIL ${renderIconSvg('arrow-tr')}</span>
+        </button>
+      `;
+
+      const nameInput = card.querySelector('input[name="name"]') as HTMLInputElement;
+      const emailInput = card.querySelector('input[name="email"]') as HTMLInputElement;
+      const serviceSelect = card.querySelector('select[name="service"]') as HTMLSelectElement;
+      const messageArea = card.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
+      const statusEl = card.querySelector('.y2k-ai-draft-status') as HTMLElement;
+      const submitDraftBtn = card.querySelector('.y2k-ai-draft-btn') as HTMLButtonElement;
+      const submitSpan = submitDraftBtn.querySelector('span') as HTMLElement;
+
+      nameInput.value = draft.name;
+      emailInput.value = draft.email;
+      serviceSelect.value = draft.service;
+      messageArea.value = draft.message;
+
+      card.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        submitDraftBtn.disabled = true;
+        submitSpan.innerHTML = `SENDING... ${renderIconSvg('sparkle')}`;
+        statusEl.hidden = false;
+        statusEl.className = 'y2k-ai-draft-status';
+        statusEl.textContent = 'CONNECTING TO TRANSMISSION RELAY...';
+
+        try {
+          await sendContactEmail({
+            name: nameInput.value,
+            email: emailInput.value,
+            service: serviceSelect.value,
+            message: messageArea.value,
+            accessKey,
+          });
+
+          submitSpan.innerHTML = `TRANSMISSION SENT ${renderIconSvg('check')}`;
+          statusEl.className = 'y2k-ai-draft-status is-success';
+          statusEl.innerHTML = `${renderIconSvg('check')} DELIVERED TO JOSHUAORLINA08@GMAIL.COM`;
+          nameInput.disabled = true;
+          emailInput.disabled = true;
+          serviceSelect.disabled = true;
+          messageArea.disabled = true;
+          history.push({
+            role: 'assistant',
+            content: `Email successfully delivered to Joshua from ${nameInput.value} (${emailInput.value}).`,
+          });
+        } catch (err: any) {
+          submitDraftBtn.disabled = false;
+          submitSpan.innerHTML = `RETRY SEND ${renderIconSvg('arrow-tr')}`;
+          statusEl.className = 'y2k-ai-draft-status is-error';
+          statusEl.innerHTML = `${renderIconSvg('alert')} ${escapeHtml(err?.message || 'Unable to send right now.')}`;
+        }
+        scrollToBottom();
+      });
+
+      messagesEl.appendChild(card);
+      scrollToBottom();
+    };
+
+    const resetChat = () => {
+      history = [];
+      messagesEl.innerHTML = '';
+      promptsEl.hidden = false;
+      nodeLabel.textContent = 'NODE: OSS-20B';
+      nodeLabel.classList.remove('is-fallback');
+      appendMessageBubble('assistant', WELCOME_MESSAGE);
+    };
+
+    const setOpen = (open: boolean) => {
+      panel.hidden = !open;
+      trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        setTimeout(() => input.focus(), 40);
+        scrollToBottom();
+      }
+    };
+
+    const submitUserPrompt = async (text: string) => {
+      const trimmed = text.trim();
+      if (!trimmed || isBusy) return;
+
+      isBusy = true;
+      promptsEl.hidden = true;
+      input.value = '';
+      input.style.height = '42px';
+      input.style.overflowY = 'hidden';
+      sendBtn.disabled = true;
+
+      appendMessageBubble('user', trimmed);
+      history.push({ role: 'user', content: trimmed });
+
+      const typingEl = document.createElement('div');
+      typingEl.className = 'y2k-ai-msg y2k-ai-msg--assistant y2k-ai-typing';
+      typingEl.innerHTML = `<div class="y2k-ai-msg-tag">DUA</div><div class="y2k-ai-msg-body"><p>${renderIconSvg('sparkle')} PROCESSING SIGNAL...</p></div>`;
+      messagesEl.appendChild(typingEl);
+      scrollToBottom();
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: history }),
+        });
+
+        const data = await res.json();
+        typingEl.remove();
+
+        if (!res.ok) {
+          throw new Error(data?.error || `Request failed (${res.status})`);
+        }
+
+        if (typeof data?.modelUsed === 'string') {
+          const is120b = data.modelUsed.includes('120b');
+          nodeLabel.textContent = data.fallbackUsed
+            ? 'NODE: OSS-120B (FALLBACK)'
+            : is120b
+              ? 'NODE: OSS-120B'
+              : 'NODE: OSS-20B';
+          nodeLabel.classList.toggle('is-fallback', Boolean(data.fallbackUsed));
+        }
+
+        const replyText = typeof data?.reply === 'string' && data.reply.trim()
+          ? data.reply.trim()
+          : 'Signal received.';
+
+        appendMessageBubble('assistant', replyText);
+        history.push({ role: 'assistant', content: replyText });
+
+        if (data?.emailDraft) {
+          appendEmailDraftCard(data.emailDraft as EmailDraft);
+        }
+      } catch (err: any) {
+        typingEl.remove();
+        history.pop();
+        appendMessageBubble(
+          'assistant',
+          err?.message || 'Connection interrupted. Try again or visit /contact.',
+          true
+        );
+      } finally {
+        isBusy = false;
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    };
+
+    trigger.addEventListener('click', () => setOpen(panel.hidden));
+    closeBtn.addEventListener('click', () => setOpen(false));
+    resetBtn.addEventListener('click', resetChat);
+
+    promptsEl.querySelectorAll<HTMLButtonElement>('.y2k-ai-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const prompt = chip.getAttribute('data-prompt') || '';
+        if (prompt) submitUserPrompt(prompt);
+      });
+    });
+
+    input.addEventListener('input', () => {
+      if (!input.value) {
+        input.style.height = '42px';
+        input.style.overflowY = 'hidden';
+        return;
+      }
+      input.style.height = '42px';
+      const nextHeight = Math.min(input.scrollHeight, 110);
+      input.style.height = `${Math.max(42, nextHeight)}px`;
+      input.style.overflowY = input.scrollHeight > 110 ? 'auto' : 'hidden';
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitUserPrompt(input.value);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        setOpen(false);
+      }
+    });
+
+    resetChat();
+  }
+
+  initAiAssistant();
+  document.addEventListener('astro:page-load', initAiAssistant);
+</script>

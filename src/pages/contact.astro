@@ -3,8 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Y2KIcon from '../components/Y2KIcon.astro';
 import { contactInfo } from '../data/portfolio';
 
+import { DEFAULT_WEB3FORMS_ACCESS_KEY } from '../lib/send-contact-email';
+
 const web3FormsKey =
-  import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY || '654169fc-f8ef-4f1c-bc67-d88443af5f34';
+  import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY || DEFAULT_WEB3FORMS_ACCESS_KEY;
 ---
 
 <BaseLayout
@@ -145,6 +147,7 @@ const web3FormsKey =
   <script>
     import gsap from 'gsap';
     import { renderIconSvg } from '../lib/icons';
+    import { sendContactEmail } from '../lib/send-contact-email';
 
     function initContactPage() {
       const rows = document.querySelectorAll('#contact-dossier .dossier-item');
@@ -187,62 +190,23 @@ const web3FormsKey =
         statusBox.textContent = '● CONNECTING TO TRANSMISSION RELAY...';
 
         try {
-          let response: Response;
+          await sendContactEmail({
+            name,
+            email,
+            service,
+            message,
+            accessKey,
+            botcheck: formData.get('botcheck') || '',
+          });
 
-          if (accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY') {
-            // Primary: Web3Forms API
-            response = await fetch('https://api.web3forms.com/submit', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-              },
-              body: JSON.stringify({
-                access_key: accessKey,
-                subject: `[Portfolio] ${service} — from ${name}`,
-                from_name: 'Joshua Orlina Portfolio',
-                name,
-                email,
-                replyto: email,
-                opportunity_type: service,
-                message,
-                botcheck: formData.get('botcheck') || '',
-              }),
-            });
-          } else {
-            // Automatic Zero-Config Fallback: FormSubmit AJAX directly to joshuaorlina08@gmail.com
-            response = await fetch('https://formsubmit.co/ajax/joshuaorlina08@gmail.com', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-              },
-              body: JSON.stringify({
-                _subject: `[Portfolio] ${service} — from ${name}`,
-                _replyto: email,
-                _template: 'table',
-                Name: name,
-                Email: email,
-                'Opportunity Type': service,
-                Message: message,
-              }),
-            });
-          }
-
-          const result = await response.json();
-
-          if (response.ok && (result.success === true || result.success === 'true')) {
-            btnText.innerHTML = `MESSAGE SENT ${renderIconSvg('check')}`;
-            statusBox.style.borderColor = '#77ffb6';
-            statusBox.style.color = '#77ffb6';
-            setStatus(
-              renderIconSvg('check'),
-              'TRANSMISSION DELIVERED DIRECTLY TO JOSHUAORLINA08@GMAIL.COM.'
-            );
-            form.reset();
-          } else {
-            throw new Error(result.message || 'Submission failed');
-          }
+          btnText.innerHTML = `MESSAGE SENT ${renderIconSvg('check')}`;
+          statusBox.style.borderColor = '#77ffb6';
+          statusBox.style.color = '#77ffb6';
+          setStatus(
+            renderIconSvg('check'),
+            'TRANSMISSION DELIVERED DIRECTLY TO JOSHUAORLINA08@GMAIL.COM.'
+          );
+          form.reset();
         } catch (err: any) {
           btnText.innerHTML = `RETRY SEND ${renderIconSvg('arrow-tr')}`;
           statusBox.style.borderColor = '#ff7b9c';

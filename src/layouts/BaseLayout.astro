@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Y2KIcon from '../components/Y2KIcon.astro';
+import AiAssistant from '../components/AiAssistant.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -35,6 +36,7 @@ const {
       <slot />
     </main>
     <Footer />
+    <AiAssistant />
 
     <script>
       import gsap from 'gsap';
