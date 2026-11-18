@@ -191,7 +191,8 @@ function safeParseJson(raw: string): Record<string, unknown> {
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  const apiKey = (import.meta.env.GROQ_API_KEY || process.env.GROQ_API_KEY || '').trim();
+  const runtimeEnv = typeof process !== 'undefined' ? process.env : undefined;
+  const apiKey = (runtimeEnv?.['GROQ_API_KEY'] || import.meta.env.GROQ_API_KEY || '').trim();
   if (!apiKey) {
     console.error('[api/chat] Missing GROQ_API_KEY environment variable.');
     return jsonResponse(
