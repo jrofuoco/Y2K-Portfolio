@@ -10,8 +10,9 @@ export const prerender = false;
 
 const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODELS = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b'] as const;
-const MAX_HISTORY_MESSAGES = 10;
-const MAX_MESSAGE_CHARS = 2000;
+const MAX_HISTORY_MESSAGES = 8;
+const MAX_MESSAGE_CHARS = 1500;
+const MAX_TOOL_CALLS_PER_TURN = 2;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface ClientChatMessage {
@@ -140,7 +141,7 @@ async function callGroqWithFallback(
         messages,
         ...(enableTools ? { tools: TOOLS, tool_choice: 'auto' } : {}),
         temperature: 0.4,
-        max_completion_tokens: 700,
+        max_completion_tokens: 600,
       }),
     });
 
@@ -263,11 +264,24 @@ export const POST: APIRoute = async ({ request }) => {
       });
 
       let readyToReturnDraft = false;
+      let detailCallsCount = 0;
 
       for (const toolCall of toolCalls) {
         const args = safeParseJson(toolCall.function.arguments);
 
         if (toolCall.function.name === 'get_project_details') {
+          if (detailCallsCount >= MAX_TOOL_CALLS_PER_TURN) {
+            conversation.push({
+              role: 'tool',
+              tool_call_id: toolCall.id,
+              content: JSON.stringify({
+                skipped: true,
+                reason: 'Use PROJECTS INDEX summary for broad overviews.',
+              }),
+            });
+            continue;
+          }
+          detailCallsCount++;
           const query = typeof args.query === 'string' ? args.query : '';
           const details = findProjectDetails(query);
           conversation.push({
