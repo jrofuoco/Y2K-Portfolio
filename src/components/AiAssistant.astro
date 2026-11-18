@@ -26,13 +26,14 @@ const web3FormsKey =
     </span>
   </button>
 
-  <section
-    class="hud-frame y2k-ai-panel"
+  <div
+    class="y2k-ai-panel-shell"
     id="y2k-ai-panel"
     role="dialog"
     aria-label="DUA Portfolio AI Assistant"
     hidden
   >
+    <section class="y2k-ai-panel">
     <header class="y2k-ai-header">
       <div class="y2k-ai-title-wrap">
         <span class="y2k-ai-badge"><Y2KIcon name="sparkle" /> DUA // AI</span>
@@ -75,19 +76,22 @@ const web3FormsKey =
 
     <form class="y2k-ai-form" id="y2k-ai-form">
       <label class="sr-only" for="y2k-ai-input">Ask DUA a question</label>
-      <textarea
-        id="y2k-ai-input"
-        class="form-input y2k-ai-input"
-        rows="1"
-        placeholder="Ask about Joshua, projects, or email..."
-        maxlength="1200"
-        required
-      ></textarea>
+      <div class="y2k-ai-input-wrap">
+        <textarea
+          id="y2k-ai-input"
+          class="form-input y2k-ai-input"
+          rows="1"
+          placeholder="Ask about Joshua, projects, or email..."
+          maxlength="1200"
+          required
+        ></textarea>
+      </div>
       <button type="submit" class="y2k-btn y2k-btn--light y2k-ai-send" id="y2k-ai-send" aria-label="Send message">
         <span><Y2KIcon name="arrow-tr" /></span>
       </button>
     </form>
   </section>
+  </div>
 </div>
 
 <script>
