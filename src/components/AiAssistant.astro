@@ -95,6 +95,7 @@ const web3FormsKey =
 </div>
 
 <script>
+  import gsap from 'gsap';
   import { renderIconSvg } from '../lib/icons';
   import { sendContactEmail } from '../lib/send-contact-email';
 
@@ -445,13 +446,18 @@ const web3FormsKey =
       appendMessageBubble('assistant', WELCOME_MESSAGE);
     };
 
+    let idleTl: gsap.core.Timeline | null = null;
+
     const setOpen = (open: boolean) => {
       panel.hidden = !open;
       trigger.hidden = open;
       trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (open) {
+        idleTl?.pause(0);
         setTimeout(() => input.focus(), 40);
         scrollToBottom();
+      } else {
+        idleTl?.restart(true);
       }
     };
 
@@ -517,6 +523,75 @@ const web3FormsKey =
     trigger.addEventListener('click', () => setOpen(panel.hidden));
     closeBtn.addEventListener('click', () => setOpen(false));
     resetBtn.addEventListener('click', resetChat);
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const sparkle = trigger.querySelector('svg');
+      const baseShadow =
+        '0 10px 30px rgba(2, 11, 43, 0.7), 0 0 22px rgba(120, 178, 255, 0.55), 0 0 0 0 rgba(120, 178, 255, 0.65)';
+
+      gsap.fromTo(
+        trigger,
+        { scale: 0.8, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.55, delay: 0.4, ease: 'back.out(1.7)' }
+      );
+
+      // Periodic idle attention-catcher: sonar ring ping + micro-nudge + sparkle spin
+      idleTl = gsap.timeline({ repeat: -1, repeatDelay: 4.5, delay: 2.2 });
+      idleTl
+        .fromTo(
+          trigger,
+          { boxShadow: baseShadow },
+          {
+            boxShadow:
+              '0 10px 30px rgba(2, 11, 43, 0.7), 0 0 38px rgba(120, 178, 255, 0.95), 0 0 0 10px rgba(120, 178, 255, 0)',
+            duration: 0.7,
+            ease: 'power2.out',
+          },
+          0
+        )
+        .to(trigger, { scale: 1.07, rotation: -2, duration: 0.14, ease: 'power2.out' }, 0)
+        .to(trigger, { rotation: 2, duration: 0.12, ease: 'power1.inOut' })
+        .to(trigger, { scale: 1, rotation: 0, duration: 0.25, ease: 'back.out(2)' });
+
+      if (sparkle) {
+        idleTl
+          .to(sparkle, { rotation: '+=360', scale: 1.25, duration: 0.5, ease: 'back.out(1.5)' }, 0)
+          .to(sparkle, { scale: 1, duration: 0.25, ease: 'power2.out' });
+
+        trigger.addEventListener('mouseenter', () => {
+          idleTl?.pause(0);
+          gsap.to(sparkle, {
+            rotation: '+=180',
+            scale: 1.25,
+            duration: 0.45,
+            ease: 'back.out(1.6)',
+            overwrite: 'auto',
+          });
+        });
+
+        trigger.addEventListener('mouseleave', () => {
+          gsap.to(sparkle, {
+            scale: 1,
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+          if (panel.hidden) {
+            idleTl?.restart(true);
+          }
+        });
+      }
+
+      trigger.addEventListener('pointerdown', () => {
+        idleTl?.pause(0);
+        gsap.to(trigger, { scale: 0.94, duration: 0.1, ease: 'power2.out' });
+      });
+
+      const releaseScale = () => {
+        gsap.to(trigger, { scale: 1, duration: 0.25, ease: 'back.out(2)' });
+      };
+      trigger.addEventListener('pointerup', releaseScale);
+      trigger.addEventListener('pointerleave', releaseScale);
+    }
 
     promptsEl.querySelectorAll<HTMLButtonElement>('.y2k-ai-chip').forEach((chip) => {
       chip.addEventListener('click', () => {
