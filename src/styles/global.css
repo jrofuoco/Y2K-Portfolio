@@ -1842,6 +1842,10 @@ button:focus-visible {
     0 0 22px rgba(120, 178, 255, 0.55);
 }
 
+.y2k-ai-trigger[hidden] {
+  display: none;
+}
+
 .y2k-ai-trigger > span {
   gap: 10px;
 }

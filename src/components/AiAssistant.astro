@@ -223,8 +223,9 @@ const web3FormsKey =
         continue;
       }
 
-      // Headings (#, ##, ###, ####)
-      const headingMatch = trimmed.match(/^#{1,4}\s+(.+)$/);
+      // Headings (#, ##, ###, ####), including accidental **### Heading** wrappers
+      const cleanHeadingLine = trimmed.replace(/^\*\*\s*(#{1,4}\s+.+?)\s*\*\*$/, '$1');
+      const headingMatch = cleanHeadingLine.match(/^#{1,4}\s+(.+)$/);
       if (headingMatch) {
         closeList();
         chunks.push(`<h4 class="y2k-ai-h">${formatInlineMarkdown(headingMatch[1])}</h4>`);
@@ -440,6 +441,7 @@ const web3FormsKey =
 
     const setOpen = (open: boolean) => {
       panel.hidden = !open;
+      trigger.hidden = open;
       trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (open) {
         setTimeout(() => input.focus(), 40);

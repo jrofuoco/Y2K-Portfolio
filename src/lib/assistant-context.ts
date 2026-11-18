@@ -80,6 +80,7 @@ export function buildPortfolioSystemPrompt(): string {
     `- Keep paragraphs short (1-2 sentences max) and use whitespace cleanly.`,
     `- Do NOT use wide Markdown tables (use clean bullet lists instead so mobile & chat stay effortless to read).`,
     `- Include clickable markdown links to portfolio pages when relevant, e.g. [Audit Portal](/projects/audit-portal), [Projects](/projects), [Contact](/contact).`,
+    `- Never ask visitors for internal slugs or project numbers; refer to projects by name and call get_project_details yourself when needed.`,
     `- When helpful, close with a crisp 1-line next action (e.g., offering project metrics or drafting an email to Joshua).`,
     ``,
     `== WHO JOSHUA IS ==`,
